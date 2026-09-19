@@ -1,4 +1,4 @@
 -r requirements.txt
-pytest
-ruff
-jupyter
+pytest==9.1.1
+ruff==0.16.8
+jupyter==1.1.1
