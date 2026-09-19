@@ -1,0 +1,15 @@
+{
+  "split_date": "2010-05-26 21:00:00",
+  "test_hours": 4416,
+  "test_mean_kw": 0.9383,
+  "naive_24h": {
+    "mae": 0.4932,
+    "rmse": 0.7398,
+    "n_valid": 4159
+  },
+  "naive_168": {
+    "mae": 0.5373,
+    "rmse": 0.7804,
+    "n_valid": 3999
+  }
+}
