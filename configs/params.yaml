@@ -1,0 +1,16 @@
+#configs/params.yaml
+
+#File relativo ai parametri del progetto.
+#Gli script vengono lanciati da qui.
+
+data:
+  processed_path: data/processed/hourly.parquet
+  target: global_active_power #kW medi nell'ora
+
+features:
+  horizion: 1 #si estende a 24 in seguito
+  lags: [0, 1, 2, 3, 24, 25, 48, 168]
+  rolling_windows: [24, 168] #finestre chiuse all'ora corrente inclusa
+
+split:
+  test_months: 12 #ciclo stagionale completo
