@@ -8,7 +8,7 @@ data:
   target: global_active_power #kW medi nell'ora
 
 features:
-  horizion: 1 #si estende a 24 in seguito
+  horizon: 1 #si estende a 24 in seguito
   lags: [0, 1, 2, 3, 24, 25, 48, 168]
   rolling_windows: [24, 168] #finestre chiuse all'ora corrente inclusa
 
