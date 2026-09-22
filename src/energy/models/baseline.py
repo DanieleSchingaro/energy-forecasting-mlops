@@ -1,45 +1,57 @@
 #src/energy/models/baseline.py
 
 """
-Confronto di baseline stagionali su stessa ora.
+Confronto di baseline stagionali su stessa ora, valutate su insieme di test condiviso.
 """
 
 from __future__ import annotations
 from pathlib import Path
 import pandas as pd
 import json
+from energy.config import load_params
+from energy.evaluation import(
+    NAIVE_SEASONS,
+    evaluation_set,
+    regression_metrics,
+    split_date,
+)
+from energy.features.build import make_supervised
 
-DATA=Path("data/processed/hourly.parquet")
 OUT=Path("reports/baseline_metrics.json")
-TEST_MONTHS=6
-TARGET="global_active_power"
-
-def evaluate(y_true:pd.Series, y_pred:pd.Series)->dict[str, float]:
-    mask=y_true.notna() & y_pred.notna()
-    error=y_true[mask]-y_pred[mask]
-    return{
-        "mae": round(float(error.abs().mean()), 4),
-        "rmse": round(float((error**2).mean()**0.5), 4),
-        "n_valid": int(mask.sum()),
-    }
 
 def main()->None:
-    y=pd.read_parquet(DATA)[TARGET]
+    params=load_params()
+    target=params["data"]["target"]
+    horizon=params["features"]["horizon"]
 
-    split=y.index.max()-pd.DateOffset(months=TEST_MONTHS)
-    test=y[y.index>split]
-    print(f"Test: {test.index.min()} -> {test.index.max()} ({len(test)} ore)")
+    raw=pd.read_parquet(params["data"]["processed_path"])
+    X, y=make_supervised(
+        raw,
+        target,
+        horizon,
+        params["features"]["lags"],
+        params["features"]["rolling_windows"],
+    )
+
+    split=split_date(raw.index, params["split"]["test_months"])
+    test=evaluation_set(raw, X, y, target, horizon, split)
+    test_hours_total=int((raw.index>split).sum())
 
     metrics={
         "split_date":str(split),
-        "test_hours":len(test),
-        "test_mean_kw":round(float(test.mean()), 4),
-        "naive_24h":evaluate(test, y.shift(24).loc[test.index]),
-        "naive_168":evaluate(test, y.shift(168).loc[test.index]),
+        "horizon":horizon,
+        "test_hours_total":test_hours_total,
+        "test_hours_evaluated":len(test),
+        "test_coverage":round(len(test)/test_hours_total, 4),
+        "test_mean_kw":round(float(test["y"].mean()), 4),
     }
 
+    for season in NAIVE_SEASONS:
+        column=f"naive_{season}h"
+        metrics[column]=regression_metrics(test["y"], test[column])
+
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(metrics, indent=2))
+    OUT.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     print(json.dumps(metrics, indent=2))
 
 if __name__=="__main__":
