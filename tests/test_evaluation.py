@@ -34,4 +34,7 @@ def test_naive_forecast_uses_same_hour_one_season_before()->None:
     t=y.index[100]
     target_time=t+pd.Timedelta(hours=horizon)
     assert forecast.loc[t]==y.loc[target_time-pd.Timedelta(hours=season)]
- 
+
+def test_naive_forecast_rejects_future_values()->None:
+    with pytest.raises(ValueError):
+        naive_forecast(_hourly(100), season=24, horizon=48)
