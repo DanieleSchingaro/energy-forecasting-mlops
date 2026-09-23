@@ -1,0 +1,77 @@
+# Pipeline riproducibile: `dvc repro` riesegue solo gli stage i cui input
+# (script, dati, parametri) sono cambiati.
+stages:
+  download:
+    cmd: python -m energy.data.download
+    deps:
+      - src/energy/data/download.py
+    outs:
+      - data/raw/household_power_consumption.txt
+
+  make_dataset:
+    cmd: python -m energy.data.make_dataset
+    deps:
+      - src/energy/data/make_dataset.py
+      - data/raw/household_power_consumption.txt
+    outs:
+      - data/processed/hourly.parquet
+
+  baseline:
+    cmd: python -m energy.models.baseline
+    deps:
+      - src/energy/models/baseline.py
+      - src/energy/evaluation.py
+      - src/energy/features/build.py
+      - src/energy/config.py
+      - src/energy/tracking.py
+      - data/processed/hourly.parquet
+    params:
+      - configs/params.yaml:
+          - data
+          - features
+          - split
+          - mlflow
+    metrics:
+      - reports/baseline_metrics.json:
+          cache: false
+
+  train:
+    cmd: python -m energy.models.train
+    deps:
+      - src/energy/models/train.py
+      - src/energy/evaluation.py
+      - src/energy/features/build.py
+      - src/energy/config.py
+      - src/energy/tracking.py
+      - data/processed/hourly.parquet
+    params:
+      - configs/params.yaml:
+          - data
+          - features
+          - split
+          - model
+          - mlflow
+    outs:
+      - models/random_forest.joblib
+      - models/xgboost.joblib
+      - reports/feature_importance_random_forest.csv:
+          cache: false
+      - reports/feature_importance_xgboost.csv:
+          cache: false
+    metrics:
+      - reports/model_metrics.json:
+          cache: false
+
+  promote:
+    cmd: python -m energy.models.promote
+    deps:
+      - src/energy/models/promote.py
+      - src/energy/tracking.py
+      - reports/model_metrics.json
+      - reports/baseline_metrics.json
+    params:
+      - configs/params.yaml:
+          - mlflow
+    outs:
+      - reports/champion.json:
+          cache: false
