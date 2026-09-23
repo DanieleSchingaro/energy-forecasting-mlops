@@ -6,3 +6,6 @@ __pycache__/
 /models/
 mlruns/
 .env
+mlflow.db
+mlartifacts/
+logs/
