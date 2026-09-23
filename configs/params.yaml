@@ -13,7 +13,25 @@ features:
   rolling_windows: [24, 168] #finestre chiuse all'ora corrente inclusa
 
 split:
-  test_months: 12 #ciclo stagionale completo
+  test_months: 12             # un ciclo stagionale completo nel test
+  cv_splits: 5                # fold di TimeSeriesSplit sul solo training
+  cv_gap_hours: 24            # righe scartate fra training e validation di ogni fold
+
+model:
+  random_forest:
+    n_estimators: 300
+    max_depth: 20
+    min_samples_leaf: 5
+    n_jobs: -1
+    random_state: 42
+  xgboost:
+    n_estimators: 600
+    learning_rate: 0.05
+    max_depth: 6
+    subsample: 0.8
+    colsample_bytree: 0.8
+    n_jobs: -1
+    random_state: 42
 
 mlflow:
   tracking_uri: sqlite:///mlflow.db   # il Model Registry non funziona con il file store mlruns/
