@@ -2,16 +2,16 @@
 # (script, dati, parametri) sono cambiati.
 stages:
   download:
-    cmd: python -m energy.data.download
+    cmd: python -m energy.data.download_dataset
     deps:
-      - src/energy/data/download.py
+      - src/energy/data/download_dataset.py
     outs:
       - data/raw/household_power_consumption.txt
 
   make_dataset:
-    cmd: python -m energy.data.make_dataset
+    cmd: python -m energy.data.create_dataset
     deps:
-      - src/energy/data/make_dataset.py
+      - src/energy/data/create_dataset.py
       - data/raw/household_power_consumption.txt
     outs:
       - data/processed/hourly.parquet
