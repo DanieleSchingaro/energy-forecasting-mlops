@@ -2,12 +2,14 @@
 
 """
 Confronto di baseline stagionali su stessa ora, valutate su insieme di test condiviso.
+Ogni baseline viene registrata come run MLFlow con il tag kind=baseline.
 """
 
 from __future__ import annotations
 from pathlib import Path
 import pandas as pd
 import json
+import mlflow
 from energy.config import load_params
 from energy.evaluation import(
     NAIVE_SEASONS,
@@ -16,6 +18,7 @@ from energy.evaluation import(
     split_date,
 )
 from energy.features.build import make_supervised
+from energy.tracking import setup_mlflow
 
 OUT=Path("reports/baseline_metrics.json")
 
@@ -49,6 +52,26 @@ def main()->None:
     for season in NAIVE_SEASONS:
         column=f"naive_{season}h"
         metrics[column]=regression_metrics(test["y"], test[column])
+
+    setup_mlflow(params)
+    for season in NAIVE_SEASONS:
+        name=f"naive_{season}h"
+        with mlflow.start_run(run_name=name):
+            mlflow.set_tags({"kind": "baseline", "model": name})
+            mlflow.log_params(
+                {
+                    "season_hours":season,
+                    "horizon":horizon,
+                    "test_months":params["split"]["test_months"],
+                }
+            )
+            mlflow.log_metrics(
+                {
+                    "test_mae":metrics[name]["mae"],
+                    "test_rmse":metrics[name]["rmse"],
+                    "n_test":len(test),
+                }
+            )
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
