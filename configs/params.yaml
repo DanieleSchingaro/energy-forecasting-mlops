@@ -14,3 +14,9 @@ features:
 
 split:
   test_months: 12 #ciclo stagionale completo
+
+mlflow:
+  tracking_uri: sqlite:///mlflow.db   # il Model Registry non funziona con il file store mlruns/
+  experiment: energy-forecasting
+  registered_model: energy-forecaster
+  champion_alias: champion
