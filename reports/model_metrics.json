@@ -1,0 +1,60 @@
+{
+  "random_forest": {
+    "cv": {
+      "folds": [
+        0.4128,
+        0.4308,
+        0.3444,
+        0.3905,
+        0.326
+      ],
+      "mae_mean": 0.3809,
+      "mae_std": 0.0446
+    },
+    "test": {
+      "mae": 0.343,
+      "rmse": 0.496
+    },
+    "fit_seconds": 7.3,
+    "n_train": 23827,
+    "n_test": 7789,
+    "params": {
+      "n_estimators": 300,
+      "max_depth": 20,
+      "min_samples_leaf": 5,
+      "n_jobs": -1,
+      "random_state": 42
+    },
+    "improvement_vs_naive_24h": 0.4014
+  },
+  "xgboost": {
+    "cv": {
+      "folds": [
+        0.4316,
+        0.4478,
+        0.3885,
+        0.4153,
+        0.3283
+      ],
+      "mae_mean": 0.4023,
+      "mae_std": 0.0468
+    },
+    "test": {
+      "mae": 0.353,
+      "rmse": 0.5022
+    },
+    "fit_seconds": 0.9,
+    "n_train": 23827,
+    "n_test": 7789,
+    "params": {
+      "n_estimators": 600,
+      "learning_rate": 0.05,
+      "max_depth": 6,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "n_jobs": -1,
+      "random_state": 42
+    },
+    "improvement_vs_naive_24h": 0.3839
+  }
+}

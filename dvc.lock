@@ -1,0 +1,212 @@
+schema: '2.0'
+stages:
+  download:
+    cmd: python -m energy.data.download_dataset
+    deps:
+    - path: src/energy/data/download_dataset.py
+      hash: md5
+      md5: 6756aef4c1c9bf2cbce139d675c21807
+      size: 932
+    outs:
+    - path: data/raw/household_power_consumption.txt
+      hash: md5
+      md5: e05286cd4a257d80c3f0407b350df7dd
+      size: 132960755
+  make_dataset:
+    cmd: python -m energy.data.create_dataset
+    deps:
+    - path: data/raw/household_power_consumption.txt
+      hash: md5
+      md5: e05286cd4a257d80c3f0407b350df7dd
+      size: 132960755
+    - path: src/energy/data/create_dataset.py
+      hash: md5
+      md5: 1cb5725c940a32c11ce8549271203875
+      size: 1648
+    outs:
+    - path: data/processed/hourly.parquet
+      hash: md5
+      md5: b2bdbbef1d0ecc52945b70b31daf38fe
+      size: 530239
+  baseline:
+    cmd: python -m energy.models.baseline
+    deps:
+    - path: data/processed/hourly.parquet
+      hash: md5
+      md5: b2bdbbef1d0ecc52945b70b31daf38fe
+      size: 530239
+    - path: src/energy/config.py
+      hash: md5
+      md5: 5c6f3d4651a1f589f5bc26b3800ec3ca
+      size: 373
+    - path: src/energy/evaluation.py
+      hash: md5
+      md5: 339ac26ad929ce76bb3f99cd7ecb44ee
+      size: 2222
+    - path: src/energy/features/build.py
+      hash: md5
+      md5: 39543b5f273cee2628e0190fceadc690
+      size: 3016
+    - path: src/energy/models/baseline.py
+      hash: md5
+      md5: 1a1cad0d823bcea640c368c027d923a2
+      size: 2468
+    - path: src/energy/tracking.py
+      hash: md5
+      md5: 9df236077f06ea01e7570737b99d57b4
+      size: 942
+    params:
+      configs/params.yaml:
+        data:
+          processed_path: data/processed/hourly.parquet
+          target: global_active_power
+        features:
+          horizon: 1
+          lags:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 24
+          - 25
+          - 48
+          - 168
+          rolling_windows:
+          - 24
+          - 168
+        mlflow:
+          tracking_uri: sqlite:///mlflow.db
+          experiment: energy-forecasting
+          registered_model: energy-forecaster
+          champion_alias: champion
+        split:
+          test_months: 12
+          cv_splits: 5
+          cv_gap_hours: 24
+    outs:
+    - path: reports/baseline_metrics.json
+      hash: md5
+      md5: 966deae539224d41c595e9f211c65e88
+      size: 305
+  train:
+    cmd: python -m energy.models.train
+    deps:
+    - path: data/processed/hourly.parquet
+      hash: md5
+      md5: b2bdbbef1d0ecc52945b70b31daf38fe
+      size: 530239
+    - path: src/energy/config.py
+      hash: md5
+      md5: 5c6f3d4651a1f589f5bc26b3800ec3ca
+      size: 373
+    - path: src/energy/evaluation.py
+      hash: md5
+      md5: 339ac26ad929ce76bb3f99cd7ecb44ee
+      size: 2222
+    - path: src/energy/features/build.py
+      hash: md5
+      md5: 39543b5f273cee2628e0190fceadc690
+      size: 3016
+    - path: src/energy/models/train.py
+      hash: md5
+      md5: 9e46a5f9b0dd705244c0873019274be8
+      size: 8059
+    - path: src/energy/tracking.py
+      hash: md5
+      md5: 9df236077f06ea01e7570737b99d57b4
+      size: 942
+    params:
+      configs/params.yaml:
+        data:
+          processed_path: data/processed/hourly.parquet
+          target: global_active_power
+        features:
+          horizon: 1
+          lags:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 24
+          - 25
+          - 48
+          - 168
+          rolling_windows:
+          - 24
+          - 168
+        mlflow:
+          tracking_uri: sqlite:///mlflow.db
+          experiment: energy-forecasting
+          registered_model: energy-forecaster
+          champion_alias: champion
+        model:
+          random_forest:
+            n_estimators: 300
+            max_depth: 20
+            min_samples_leaf: 5
+            n_jobs: -1
+            random_state: 42
+          xgboost:
+            n_estimators: 600
+            learning_rate: 0.05
+            max_depth: 6
+            subsample: 0.8
+            colsample_bytree: 0.8
+            n_jobs: -1
+            random_state: 42
+        split:
+          test_months: 12
+          cv_splits: 5
+          cv_gap_hours: 24
+    outs:
+    - path: models/random_forest.joblib
+      hash: md5
+      md5: e9b61604512178023aebd6107fc4d9bc
+      size: 94460529
+    - path: models/xgboost.joblib
+      hash: md5
+      md5: f8f2983d9486861927bc2ba909ab432d
+      size: 2737663
+    - path: reports/feature_importance_random_forest.csv
+      hash: md5
+      md5: b2ff965e907cd9b93f38c14b87406d9c
+      size: 770
+    - path: reports/feature_importance_xgboost.csv
+      hash: md5
+      md5: 12c4107ab75b4f564b435ee5bfa60aea
+      size: 553
+    - path: reports/model_metrics.json
+      hash: md5
+      md5: f3a797107bfa1e0313305e5d72bfd988
+      size: 1135
+  promote:
+    cmd: python -m energy.models.promote
+    deps:
+    - path: reports/baseline_metrics.json
+      hash: md5
+      md5: 966deae539224d41c595e9f211c65e88
+      size: 305
+    - path: reports/model_metrics.json
+      hash: md5
+      md5: f3a797107bfa1e0313305e5d72bfd988
+      size: 1135
+    - path: src/energy/models/promote.py
+      hash: md5
+      md5: 5a28b149d78d17c7500bafd1deb4bafa
+      size: 3609
+    - path: src/energy/tracking.py
+      hash: md5
+      md5: 9df236077f06ea01e7570737b99d57b4
+      size: 942
+    params:
+      configs/params.yaml:
+        mlflow:
+          tracking_uri: sqlite:///mlflow.db
+          experiment: energy-forecasting
+          registered_model: energy-forecaster
+          champion_alias: champion
+    outs:
+    - path: reports/champion.json
+      hash: md5
+      md5: 4cc6f0a7f43683a5173d882b3bc7ff3c
+      size: 271

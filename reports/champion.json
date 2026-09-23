@@ -1,0 +1,10 @@
+{
+  "registered_model": "energy-forecaster",
+  "version": "1",
+  "alias": "champion",
+  "run_id": "d7563552a16544c2b6d4615fb0d74b36",
+  "model": "random_forest",
+  "test_mae": 0.343,
+  "reference_mae": 0.573,
+  "model_uri": "models:/energy-forecaster@champion"
+}
