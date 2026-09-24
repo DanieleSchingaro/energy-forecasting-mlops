@@ -50,6 +50,7 @@ stages:
           - features
           - split
           - model
+          - evaluation
           - mlflow
     outs:
       - models/random_forest.joblib
@@ -71,6 +72,7 @@ stages:
       - reports/baseline_metrics.json
     params:
       - configs/params.yaml:
+          - evaluation
           - mlflow
     outs:
       - reports/champion.json:
