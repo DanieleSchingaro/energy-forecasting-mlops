@@ -12,7 +12,11 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-NAIVE_SEASONS=(24,168)
+
+# season=1 con horizon=1 da' la persistenza (y_hat(t+1) = y(t)), che a un'ora
+# di distanza e' la baseline piu' difficile da battere; 24 e 168 coprono le
+# stagionalita' giornaliera e settimanale.
+NAIVE_SEASONS=(1, 24,168)
 
 def split_date(index:pd.DatetimeIndex, test_months:int)->pd.Timestamp:
     """
@@ -62,3 +66,26 @@ def evaluation_set(
         frame[f"naive_{season}h"]=naive_forecast(raw[target], season, horizon)
     frame=frame[is_test(frame.index, horizon, split)]
     return frame.dropna()
+
+def reference_baseline(metrics:dict, choice:str="best")->tuple[str, float]:
+    """
+    Baseline con cui confrontare i modelli, letta da reports/baseline_metrics.json
+    Con choice="best" vince la naive con il MAE più basso.
+    In alternative si può fissare una baseline per nome.
+    """
+    available={
+        name:payload["mae"]
+        for name, payload in metrics.items()
+        if name.startswith("naive_") and isinstance(payload, dict)
+    }
+    if not available:
+        raise ValueError("nessuna baseline nelle metriche: esegui prima energy.models.baseline")
+
+    if choice=="best":
+        name=min(available, key=available.get)
+    elif choice in available:
+        name=choice
+    else:
+        raise ValueError(f"baseline '{choice}' non disponibile: {sorted(available)}")
+
+    return name, available[name]
