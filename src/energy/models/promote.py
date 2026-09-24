@@ -17,10 +17,10 @@ import mlflow
 import pandas as pd
 from energy.config import load_params
 from energy.tracking import setup_mlflow
+from energy.evaluation import reference_baseline
  
 BASELINE_PATH=Path("reports/baseline_metrics.json")
 OUT=Path("reports/champion.json")
-REFERENCE="naive_24h"
 MODEL_ARTIFACT="model"
 
 def best_run(experiment:str)->pd.Series:
@@ -34,11 +34,11 @@ def best_run(experiment:str)->pd.Series:
         raise SystemExit("Nessun run di training trovato: esegui prima energy.models.train")
     return runs.iloc[0]
 
-def reference_mae()->float|None:
+def load_reference(choice:str)->tuple[str,float]|None:
     if not BASELINE_PATH.exists():
         return None
     baseline=json.loads(BASELINE_PATH.read_text(encoding="utf-8"))
-    return baseline.get(REFERENCE, {}).get("mae")
+    return reference_baseline(baseline, choice)
  
  
 def existing_version(client:mlflow.MlflowClient, name:str, run_id:str)->str|None:
@@ -74,15 +74,16 @@ def main()->None:
     client.set_model_version_tag(name, version, "model", model_name)
     client.set_model_version_tag(name, version, "test_mae", f"{test_mae:.4f}")
  
-    naive_mae=reference_mae()
-    promoted=naive_mae is None or test_mae<naive_mae
+    reference=load_reference(params["evaluation"]["reference_baseline"])
+    reference_name,reference_mae=reference if reference else (None, None)
+    promoted=reference is None or test_mae<reference_mae
     if promoted:
         client.set_registered_model_alias(name, alias, version)
         print(f"Alias {alias} -> versione {version}")
     else:
         print(
             f"Alias {alias} non assegnato: MAE {test_mae:.4f} non batte "
-            f"la baseline {REFERENCE} ({naive_mae:.4f})"
+            f"la baseline {reference_name} ({reference_mae:.4f})"
         )
  
     champion={
@@ -92,7 +93,8 @@ def main()->None:
         "run_id":run_id,
         "model":model_name,
         "test_mae":round(test_mae, 4),
-        "reference_mae":naive_mae,
+        "reference_baseline":reference_name,
+        "reference_mae":reference_mae,
         "model_uri":f"models:/{name}@{alias}" if promoted else None,
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
