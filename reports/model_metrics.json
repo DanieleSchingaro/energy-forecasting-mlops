@@ -15,7 +15,7 @@
       "mae": 0.343,
       "rmse": 0.496
     },
-    "fit_seconds": 7.3,
+    "fit_seconds": 7.0,
     "n_train": 23827,
     "n_test": 7789,
     "params": {
@@ -25,7 +25,11 @@
       "n_jobs": -1,
       "random_state": 42
     },
-    "improvement_vs_naive_24h": 0.4014
+    "reference": {
+      "baseline": "naive_1h",
+      "mae": 0.4131
+    },
+    "improvement_vs_reference": 0.1697
   },
   "xgboost": {
     "cv": {
@@ -43,7 +47,7 @@
       "mae": 0.353,
       "rmse": 0.5022
     },
-    "fit_seconds": 0.9,
+    "fit_seconds": 0.8,
     "n_train": 23827,
     "n_test": 7789,
     "params": {
@@ -55,6 +59,10 @@
       "n_jobs": -1,
       "random_state": 42
     },
-    "improvement_vs_naive_24h": 0.3839
+    "reference": {
+      "baseline": "naive_1h",
+      "mae": 0.4131
+    },
+    "improvement_vs_reference": 0.1455
   }
 }

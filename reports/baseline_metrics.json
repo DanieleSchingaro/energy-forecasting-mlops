@@ -5,6 +5,10 @@
   "test_hours_evaluated": 7789,
   "test_coverage": 0.8892,
   "test_mean_kw": 1.0811,
+  "naive_1h": {
+    "mae": 0.4131,
+    "rmse": 0.6247
+  },
   "naive_24h": {
     "mae": 0.573,
     "rmse": 0.8435

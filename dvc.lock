@@ -41,8 +41,8 @@ stages:
       size: 373
     - path: src/energy/evaluation.py
       hash: md5
-      md5: 339ac26ad929ce76bb3f99cd7ecb44ee
-      size: 2222
+      md5: 50e6fa3bf3dd7655f9e5ef3be88e03af
+      size: 3276
     - path: src/energy/features/build.py
       hash: md5
       md5: 39543b5f273cee2628e0190fceadc690
@@ -86,8 +86,8 @@ stages:
     outs:
     - path: reports/baseline_metrics.json
       hash: md5
-      md5: 966deae539224d41c595e9f211c65e88
-      size: 305
+      md5: 1a1f3ab640dbb7da4849a10601d3783b
+      size: 368
   train:
     cmd: python -m energy.models.train
     deps:
@@ -101,16 +101,16 @@ stages:
       size: 373
     - path: src/energy/evaluation.py
       hash: md5
-      md5: 339ac26ad929ce76bb3f99cd7ecb44ee
-      size: 2222
+      md5: 50e6fa3bf3dd7655f9e5ef3be88e03af
+      size: 3276
     - path: src/energy/features/build.py
       hash: md5
       md5: 39543b5f273cee2628e0190fceadc690
       size: 3016
     - path: src/energy/models/train.py
       hash: md5
-      md5: 9e46a5f9b0dd705244c0873019274be8
-      size: 8059
+      md5: b514b4eea23be2be68db6b714acd2814
+      size: 8485
     - path: src/energy/tracking.py
       hash: md5
       md5: 9df236077f06ea01e7570737b99d57b4
@@ -120,6 +120,8 @@ stages:
         data:
           processed_path: data/processed/hourly.parquet
           target: global_active_power
+        evaluation:
+          reference_baseline: best
         features:
           horizon: 1
           lags:
@@ -177,29 +179,31 @@ stages:
       size: 553
     - path: reports/model_metrics.json
       hash: md5
-      md5: f3a797107bfa1e0313305e5d72bfd988
-      size: 1135
+      md5: b28c41c2d23fd68fd0442f5bf96680a4
+      size: 1295
   promote:
     cmd: python -m energy.models.promote
     deps:
     - path: reports/baseline_metrics.json
       hash: md5
-      md5: 966deae539224d41c595e9f211c65e88
-      size: 305
+      md5: 1a1f3ab640dbb7da4849a10601d3783b
+      size: 368
     - path: reports/model_metrics.json
       hash: md5
-      md5: f3a797107bfa1e0313305e5d72bfd988
-      size: 1135
+      md5: b28c41c2d23fd68fd0442f5bf96680a4
+      size: 1295
     - path: src/energy/models/promote.py
       hash: md5
-      md5: 5a28b149d78d17c7500bafd1deb4bafa
-      size: 3609
+      md5: 51405d4b60bc94d5cb09aed2011b23de
+      size: 3837
     - path: src/energy/tracking.py
       hash: md5
       md5: 9df236077f06ea01e7570737b99d57b4
       size: 942
     params:
       configs/params.yaml:
+        evaluation:
+          reference_baseline: best
         mlflow:
           tracking_uri: sqlite:///mlflow.db
           experiment: energy-forecasting
@@ -208,5 +212,5 @@ stages:
     outs:
     - path: reports/champion.json
       hash: md5
-      md5: 4cc6f0a7f43683a5173d882b3bc7ff3c
-      size: 271
+      md5: 1bceb392e04e4347140a276812996cca
+      size: 309
