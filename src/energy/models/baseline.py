@@ -31,7 +31,6 @@ def main()->None:
     features=build_features(
         raw,
         target,
-        horizon,
         params["features"]["lags"],
         params["features"]["rolling_windows"],
     )
