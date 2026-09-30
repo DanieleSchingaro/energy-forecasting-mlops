@@ -72,7 +72,7 @@ def evaluation_set(
     Colonne: y e una naive_<season>h per ciascuna stagionalità.
     """
     frame=pd.DataFrame({"y":y}, index=X.index)
-    for season in NAIVE_SEASONS:
+    for season in seasons_for_horizon(horizon):
         frame[f"naive_{season}h"]=naive_forecast(raw[target], season, horizon)
     frame=frame[is_test(frame.index, horizon, split)]
     return frame.dropna()
