@@ -5,39 +5,43 @@
 
 data:
   processed_path: data/processed/hourly.parquet
-  target: global_active_power #kW medi nell'ora
-
+  target: global_active_power        # kW medi nell'ora
+ 
 features:
-  horizon: 1 #si estende a 24 in seguito
+  max_horizon: 24             # si addestra un modello per ogni ora da 1 a 24 (strategia direct)
   lags: [0, 1, 2, 3, 24, 25, 48, 168]
-  rolling_windows: [24, 168] #finestre chiuse all'ora corrente inclusa
-
+  rolling_windows: [24, 168]  # finestre chiuse all'ora corrente inclusa
+ 
 split:
   test_months: 12             # un ciclo stagionale completo nel test
   cv_splits: 5                # fold di TimeSeriesSplit sul solo training
   cv_gap_hours: 24            # righe scartate fra training e validation di ogni fold
-
+ 
 model:
   random_forest:
-    n_estimators: 300
-    max_depth: 20
-    min_samples_leaf: 5
-    n_jobs: -1
-    random_state: 42
+    horizons: [1, 24]         # solo gli orizzonti di confronto: ogni foresta pesa ~90 MB
+    params:
+      n_estimators: 300
+      max_depth: 20
+      min_samples_leaf: 5
+      n_jobs: -1
+      random_state: 42
   xgboost:
-    n_estimators: 600
-    learning_rate: 0.05
-    max_depth: 6
-    subsample: 0.8
-    colsample_bytree: 0.8
-    n_jobs: -1
-    random_state: 42
-
+    horizons: all             # 1..max_horizon: ~3 MB per modello
+    params:
+      n_estimators: 600
+      learning_rate: 0.05
+      max_depth: 6
+      subsample: 0.8
+      colsample_bytree: 0.8
+      n_jobs: -1
+      random_state: 42
+ 
 evaluation:
-  reference_baseline: best    # la naive piu' forte; oppure naive_1h / naive_24h / naive_168h
-
+  reference_baseline: best    # la naive piu' forte dell'orizzonte; oppure naive_24h, naive_168h
+ 
 mlflow:
   tracking_uri: sqlite:///mlflow.db   # il Model Registry non funziona con il file store mlruns/
   experiment: energy-forecasting
   registered_model: energy-forecaster
-  champion_alias: champion
+  champion_alias: champion            # l'alias effettivo e' champion-h<orizzonte>
