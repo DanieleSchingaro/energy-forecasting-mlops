@@ -44,6 +44,7 @@ stages:
       - src/energy/config.py
       - src/energy/tracking.py
       - data/processed/hourly.parquet
+      - reports/baseline_metrics.json
     params:
       - configs/params.yaml:
           - data
@@ -53,11 +54,8 @@ stages:
           - evaluation
           - mlflow
     outs:
-      - models/random_forest.joblib
-      - models/xgboost.joblib
-      - reports/feature_importance_random_forest.csv:
-          cache: false
-      - reports/feature_importance_xgboost.csv:
+      - models
+      - reports/feature_importance:
           cache: false
     metrics:
       - reports/model_metrics.json:
@@ -67,6 +65,7 @@ stages:
     cmd: python -m energy.models.promote
     deps:
       - src/energy/models/promote.py
+      - src/energy/evaluation.py
       - src/energy/tracking.py
       - reports/model_metrics.json
       - reports/baseline_metrics.json
