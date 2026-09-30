@@ -21,8 +21,8 @@ stages:
       size: 132960755
     - path: src/energy/data/create_dataset.py
       hash: md5
-      md5: 1cb5725c940a32c11ce8549271203875
-      size: 1648
+      md5: 0745aa2d4e0033fe4a1998b885402ea9
+      size: 1646
     outs:
     - path: data/processed/hourly.parquet
       hash: md5
@@ -41,16 +41,16 @@ stages:
       size: 373
     - path: src/energy/evaluation.py
       hash: md5
-      md5: 50e6fa3bf3dd7655f9e5ef3be88e03af
-      size: 3276
+      md5: fab83d02596fefead0a06afeaf7b77c1
+      size: 3712
     - path: src/energy/features/build.py
       hash: md5
-      md5: 39543b5f273cee2628e0190fceadc690
-      size: 3016
+      md5: 2a7610672fb3233398c1b905d91dd8a3
+      size: 3453
     - path: src/energy/models/baseline.py
       hash: md5
-      md5: 1a1cad0d823bcea640c368c027d923a2
-      size: 2468
+      md5: a61f5a2eac8f30ed537c54b0de363cb4
+      size: 2929
     - path: src/energy/tracking.py
       hash: md5
       md5: 9df236077f06ea01e7570737b99d57b4
@@ -61,7 +61,7 @@ stages:
           processed_path: data/processed/hourly.parquet
           target: global_active_power
         features:
-          horizon: 1
+          max_horizon: 24
           lags:
           - 0
           - 1
@@ -86,8 +86,8 @@ stages:
     outs:
     - path: reports/baseline_metrics.json
       hash: md5
-      md5: 1a1f3ab640dbb7da4849a10601d3783b
-      size: 368
+      md5: 3a26cc214113bbda3ea4b40fa79e2cd0
+      size: 6903
   train:
     cmd: python -m energy.models.train
     deps:
@@ -95,22 +95,26 @@ stages:
       hash: md5
       md5: b2bdbbef1d0ecc52945b70b31daf38fe
       size: 530239
+    - path: reports/baseline_metrics.json
+      hash: md5
+      md5: 3a26cc214113bbda3ea4b40fa79e2cd0
+      size: 6903
     - path: src/energy/config.py
       hash: md5
       md5: 5c6f3d4651a1f589f5bc26b3800ec3ca
       size: 373
     - path: src/energy/evaluation.py
       hash: md5
-      md5: 50e6fa3bf3dd7655f9e5ef3be88e03af
-      size: 3276
+      md5: fab83d02596fefead0a06afeaf7b77c1
+      size: 3712
     - path: src/energy/features/build.py
       hash: md5
-      md5: 39543b5f273cee2628e0190fceadc690
-      size: 3016
+      md5: 2a7610672fb3233398c1b905d91dd8a3
+      size: 3453
     - path: src/energy/models/train.py
       hash: md5
-      md5: b514b4eea23be2be68db6b714acd2814
-      size: 8485
+      md5: 921839499b80bb312dd5dfeac9327a84
+      size: 9349
     - path: src/energy/tracking.py
       hash: md5
       md5: 9df236077f06ea01e7570737b99d57b4
@@ -123,7 +127,7 @@ stages:
         evaluation:
           reference_baseline: best
         features:
-          horizon: 1
+          max_horizon: 24
           lags:
           - 0
           - 1
@@ -143,59 +147,63 @@ stages:
           champion_alias: champion
         model:
           random_forest:
-            n_estimators: 300
-            max_depth: 20
-            min_samples_leaf: 5
-            n_jobs: -1
-            random_state: 42
+            horizons:
+            - 1
+            - 24
+            params:
+              n_estimators: 300
+              max_depth: 20
+              min_samples_leaf: 5
+              n_jobs: -1
+              random_state: 42
           xgboost:
-            n_estimators: 600
-            learning_rate: 0.05
-            max_depth: 6
-            subsample: 0.8
-            colsample_bytree: 0.8
-            n_jobs: -1
-            random_state: 42
+            horizons: all
+            params:
+              n_estimators: 600
+              learning_rate: 0.05
+              max_depth: 6
+              subsample: 0.8
+              colsample_bytree: 0.8
+              n_jobs: -1
+              random_state: 42
         split:
           test_months: 12
           cv_splits: 5
           cv_gap_hours: 24
     outs:
-    - path: models/random_forest.joblib
+    - path: models
       hash: md5
-      md5: e9b61604512178023aebd6107fc4d9bc
-      size: 94460529
-    - path: models/xgboost.joblib
+      md5: 16a02f517f87e0a8454bd67fb2c37b3b.dir
+      size: 256228237
+      nfiles: 26
+    - path: reports/feature_importance
       hash: md5
-      md5: f8f2983d9486861927bc2ba909ab432d
-      size: 2737663
-    - path: reports/feature_importance_random_forest.csv
-      hash: md5
-      md5: b2ff965e907cd9b93f38c14b87406d9c
-      size: 770
-    - path: reports/feature_importance_xgboost.csv
-      hash: md5
-      md5: 12c4107ab75b4f564b435ee5bfa60aea
-      size: 553
+      md5: 75b5e7c786edef16e6bfca9400a390f0.dir
+      size: 14824
+      nfiles: 26
     - path: reports/model_metrics.json
       hash: md5
-      md5: b28c41c2d23fd68fd0442f5bf96680a4
-      size: 1295
+      md5: 0639ed15748c626cb55f403c6445052b
+      size: 13236
   promote:
     cmd: python -m energy.models.promote
     deps:
     - path: reports/baseline_metrics.json
       hash: md5
-      md5: 1a1f3ab640dbb7da4849a10601d3783b
-      size: 368
+      md5: 3a26cc214113bbda3ea4b40fa79e2cd0
+      size: 6903
     - path: reports/model_metrics.json
       hash: md5
-      md5: b28c41c2d23fd68fd0442f5bf96680a4
-      size: 1295
+      md5: 0639ed15748c626cb55f403c6445052b
+      size: 13236
+    - path: src/energy/evaluation.py
+      hash: md5
+      md5: fab83d02596fefead0a06afeaf7b77c1
+      size: 3712
     - path: src/energy/models/promote.py
       hash: md5
-      md5: 51405d4b60bc94d5cb09aed2011b23de
-      size: 3837
+      md5: 6a8e98320a528d76163cc381089251a3
+      size: 4088
     - path: src/energy/tracking.py
       hash: md5
       md5: 9df236077f06ea01e7570737b99d57b4
@@ -212,5 +220,5 @@ stages:
     outs:
     - path: reports/champion.json
       hash: md5
-      md5: 1bceb392e04e4347140a276812996cca
-      size: 309
+      md5: 850456304d5c455a08c7f0feb5bd215b
+      size: 7307

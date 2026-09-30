@@ -1,68 +1,656 @@
 {
   "random_forest": {
-    "cv": {
-      "folds": [
-        0.4128,
-        0.4308,
-        0.3444,
-        0.3905,
-        0.326
-      ],
-      "mae_mean": 0.3809,
-      "mae_std": 0.0446
+    "1": {
+      "cv": {
+        "folds": [
+          0.4128,
+          0.4308,
+          0.3444,
+          0.3905,
+          0.326
+        ],
+        "mae_mean": 0.3809,
+        "mae_std": 0.0446
+      },
+      "test": {
+        "mae": 0.343,
+        "rmse": 0.496
+      },
+      "fit_seconds": 7.0,
+      "n_train": 23827,
+      "n_test": 7789,
+      "reference": {
+        "baseline": "naive_1h",
+        "mae": 0.4131
+      },
+      "improvement_vs_reference": 0.1697
     },
-    "test": {
-      "mae": 0.343,
-      "rmse": 0.496
-    },
-    "fit_seconds": 7.0,
-    "n_train": 23827,
-    "n_test": 7789,
-    "params": {
-      "n_estimators": 300,
-      "max_depth": 20,
-      "min_samples_leaf": 5,
-      "n_jobs": -1,
-      "random_state": 42
-    },
-    "reference": {
-      "baseline": "naive_1h",
-      "mae": 0.4131
-    },
-    "improvement_vs_reference": 0.1697
+    "24": {
+      "cv": {
+        "folds": [
+          0.5865,
+          0.5952,
+          0.5161,
+          0.547,
+          0.4379
+        ],
+        "mae_mean": 0.5366,
+        "mae_std": 0.0636
+      },
+      "test": {
+        "mae": 0.4611,
+        "rmse": 0.6257
+      },
+      "fit_seconds": 6.6,
+      "n_train": 23743,
+      "n_test": 7697,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5729
+      },
+      "improvement_vs_reference": 0.1951
+    }
   },
   "xgboost": {
-    "cv": {
-      "folds": [
-        0.4316,
-        0.4478,
-        0.3885,
-        0.4153,
-        0.3283
-      ],
-      "mae_mean": 0.4023,
-      "mae_std": 0.0468
+    "1": {
+      "cv": {
+        "folds": [
+          0.4316,
+          0.4478,
+          0.3885,
+          0.4153,
+          0.3283
+        ],
+        "mae_mean": 0.4023,
+        "mae_std": 0.0468
+      },
+      "test": {
+        "mae": 0.353,
+        "rmse": 0.5022
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23827,
+      "n_test": 7789,
+      "reference": {
+        "baseline": "naive_1h",
+        "mae": 0.4131
+      },
+      "improvement_vs_reference": 0.1455
     },
-    "test": {
-      "mae": 0.353,
-      "rmse": 0.5022
+    "2": {
+      "cv": {
+        "folds": [
+          0.5436,
+          0.565,
+          0.525,
+          0.5113,
+          0.3893
+        ],
+        "mae_mean": 0.5068,
+        "mae_std": 0.0687
+      },
+      "test": {
+        "mae": 0.4332,
+        "rmse": 0.5952
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23822,
+      "n_test": 7785,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.573
+      },
+      "improvement_vs_reference": 0.244
     },
-    "fit_seconds": 0.8,
-    "n_train": 23827,
-    "n_test": 7789,
-    "params": {
-      "n_estimators": 600,
-      "learning_rate": 0.05,
-      "max_depth": 6,
-      "subsample": 0.8,
-      "colsample_bytree": 0.8,
-      "n_jobs": -1,
-      "random_state": 42
+    "3": {
+      "cv": {
+        "folds": [
+          0.576,
+          0.612,
+          0.5649,
+          0.5302,
+          0.4174
+        ],
+        "mae_mean": 0.5401,
+        "mae_std": 0.0745
+      },
+      "test": {
+        "mae": 0.4591,
+        "rmse": 0.6245
+      },
+      "fit_seconds": 0.9,
+      "n_train": 23818,
+      "n_test": 7781,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5731
+      },
+      "improvement_vs_reference": 0.1989
     },
-    "reference": {
-      "baseline": "naive_1h",
-      "mae": 0.4131
+    "4": {
+      "cv": {
+        "folds": [
+          0.6007,
+          0.6145,
+          0.5935,
+          0.548,
+          0.4224
+        ],
+        "mae_mean": 0.5558,
+        "mae_std": 0.0786
+      },
+      "test": {
+        "mae": 0.4716,
+        "rmse": 0.642
+      },
+      "fit_seconds": 0.7,
+      "n_train": 23814,
+      "n_test": 7777,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.573
+      },
+      "improvement_vs_reference": 0.177
     },
-    "improvement_vs_reference": 0.1455
+    "5": {
+      "cv": {
+        "folds": [
+          0.6094,
+          0.6114,
+          0.5963,
+          0.5384,
+          0.4262
+        ],
+        "mae_mean": 0.5563,
+        "mae_std": 0.0786
+      },
+      "test": {
+        "mae": 0.4685,
+        "rmse": 0.641
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23810,
+      "n_test": 7773,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5729
+      },
+      "improvement_vs_reference": 0.1822
+    },
+    "6": {
+      "cv": {
+        "folds": [
+          0.6058,
+          0.6038,
+          0.6053,
+          0.5354,
+          0.4213
+        ],
+        "mae_mean": 0.5543,
+        "mae_std": 0.0802
+      },
+      "test": {
+        "mae": 0.47,
+        "rmse": 0.6425
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23806,
+      "n_test": 7769,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5728
+      },
+      "improvement_vs_reference": 0.1795
+    },
+    "7": {
+      "cv": {
+        "folds": [
+          0.615,
+          0.5979,
+          0.5737,
+          0.5451,
+          0.4114
+        ],
+        "mae_mean": 0.5486,
+        "mae_std": 0.0811
+      },
+      "test": {
+        "mae": 0.4675,
+        "rmse": 0.6384
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23802,
+      "n_test": 7765,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5727
+      },
+      "improvement_vs_reference": 0.1837
+    },
+    "8": {
+      "cv": {
+        "folds": [
+          0.6258,
+          0.5947,
+          0.5622,
+          0.5446,
+          0.4218
+        ],
+        "mae_mean": 0.5498,
+        "mae_std": 0.0781
+      },
+      "test": {
+        "mae": 0.4704,
+        "rmse": 0.6436
+      },
+      "fit_seconds": 0.9,
+      "n_train": 23798,
+      "n_test": 7761,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5726
+      },
+      "improvement_vs_reference": 0.1785
+    },
+    "9": {
+      "cv": {
+        "folds": [
+          0.6171,
+          0.6086,
+          0.5347,
+          0.5433,
+          0.4205
+        ],
+        "mae_mean": 0.5449,
+        "mae_std": 0.0788
+      },
+      "test": {
+        "mae": 0.4644,
+        "rmse": 0.6393
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23794,
+      "n_test": 7757,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5727
+      },
+      "improvement_vs_reference": 0.1891
+    },
+    "10": {
+      "cv": {
+        "folds": [
+          0.6185,
+          0.61,
+          0.5221,
+          0.5477,
+          0.4167
+        ],
+        "mae_mean": 0.543,
+        "mae_std": 0.0815
+      },
+      "test": {
+        "mae": 0.466,
+        "rmse": 0.6391
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23790,
+      "n_test": 7753,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5729
+      },
+      "improvement_vs_reference": 0.1866
+    },
+    "11": {
+      "cv": {
+        "folds": [
+          0.6143,
+          0.6129,
+          0.5238,
+          0.552,
+          0.4213
+        ],
+        "mae_mean": 0.5449,
+        "mae_std": 0.0794
+      },
+      "test": {
+        "mae": 0.4656,
+        "rmse": 0.641
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23786,
+      "n_test": 7749,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.573
+      },
+      "improvement_vs_reference": 0.1874
+    },
+    "12": {
+      "cv": {
+        "folds": [
+          0.6271,
+          0.6264,
+          0.5368,
+          0.5537,
+          0.4203
+        ],
+        "mae_mean": 0.5529,
+        "mae_std": 0.0848
+      },
+      "test": {
+        "mae": 0.4717,
+        "rmse": 0.6492
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23782,
+      "n_test": 7745,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5731
+      },
+      "improvement_vs_reference": 0.1769
+    },
+    "13": {
+      "cv": {
+        "folds": [
+          0.6301,
+          0.6313,
+          0.5302,
+          0.558,
+          0.4208
+        ],
+        "mae_mean": 0.5541,
+        "mae_std": 0.0867
+      },
+      "test": {
+        "mae": 0.4709,
+        "rmse": 0.6454
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23778,
+      "n_test": 7741,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.573
+      },
+      "improvement_vs_reference": 0.1782
+    },
+    "14": {
+      "cv": {
+        "folds": [
+          0.6425,
+          0.6312,
+          0.5319,
+          0.5516,
+          0.4244
+        ],
+        "mae_mean": 0.5563,
+        "mae_std": 0.0881
+      },
+      "test": {
+        "mae": 0.4716,
+        "rmse": 0.6428
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23774,
+      "n_test": 7737,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5731
+      },
+      "improvement_vs_reference": 0.1771
+    },
+    "15": {
+      "cv": {
+        "folds": [
+          0.6244,
+          0.6246,
+          0.531,
+          0.5447,
+          0.4246
+        ],
+        "mae_mean": 0.5499,
+        "mae_std": 0.0825
+      },
+      "test": {
+        "mae": 0.4724,
+        "rmse": 0.6473
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23770,
+      "n_test": 7733,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5732
+      },
+      "improvement_vs_reference": 0.1759
+    },
+    "16": {
+      "cv": {
+        "folds": [
+          0.6321,
+          0.6202,
+          0.5422,
+          0.5407,
+          0.4394
+        ],
+        "mae_mean": 0.5549,
+        "mae_std": 0.0773
+      },
+      "test": {
+        "mae": 0.47,
+        "rmse": 0.6426
+      },
+      "fit_seconds": 1.0,
+      "n_train": 23767,
+      "n_test": 7729,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5734
+      },
+      "improvement_vs_reference": 0.1803
+    },
+    "17": {
+      "cv": {
+        "folds": [
+          0.6394,
+          0.6157,
+          0.5355,
+          0.5459,
+          0.4471
+        ],
+        "mae_mean": 0.5567,
+        "mae_std": 0.0756
+      },
+      "test": {
+        "mae": 0.4705,
+        "rmse": 0.6448
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23764,
+      "n_test": 7725,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5733
+      },
+      "improvement_vs_reference": 0.1793
+    },
+    "18": {
+      "cv": {
+        "folds": [
+          0.6457,
+          0.6224,
+          0.5514,
+          0.5456,
+          0.4377
+        ],
+        "mae_mean": 0.5606,
+        "mae_std": 0.0813
+      },
+      "test": {
+        "mae": 0.4697,
+        "rmse": 0.6432
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23761,
+      "n_test": 7721,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5732
+      },
+      "improvement_vs_reference": 0.1806
+    },
+    "19": {
+      "cv": {
+        "folds": [
+          0.6312,
+          0.606,
+          0.5463,
+          0.544,
+          0.4291
+        ],
+        "mae_mean": 0.5513,
+        "mae_std": 0.0781
+      },
+      "test": {
+        "mae": 0.4708,
+        "rmse": 0.6408
+      },
+      "fit_seconds": 0.7,
+      "n_train": 23758,
+      "n_test": 7717,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5731
+      },
+      "improvement_vs_reference": 0.1785
+    },
+    "20": {
+      "cv": {
+        "folds": [
+          0.6222,
+          0.6209,
+          0.5322,
+          0.5548,
+          0.4285
+        ],
+        "mae_mean": 0.5517,
+        "mae_std": 0.0796
+      },
+      "test": {
+        "mae": 0.4646,
+        "rmse": 0.6362
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23755,
+      "n_test": 7713,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5728
+      },
+      "improvement_vs_reference": 0.1889
+    },
+    "21": {
+      "cv": {
+        "folds": [
+          0.6158,
+          0.6175,
+          0.5423,
+          0.5566,
+          0.4294
+        ],
+        "mae_mean": 0.5523,
+        "mae_std": 0.0766
+      },
+      "test": {
+        "mae": 0.4628,
+        "rmse": 0.632
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23752,
+      "n_test": 7709,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5727
+      },
+      "improvement_vs_reference": 0.1919
+    },
+    "22": {
+      "cv": {
+        "folds": [
+          0.6124,
+          0.6168,
+          0.5824,
+          0.5603,
+          0.4233
+        ],
+        "mae_mean": 0.5591,
+        "mae_std": 0.0793
+      },
+      "test": {
+        "mae": 0.457,
+        "rmse": 0.6268
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23749,
+      "n_test": 7705,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5728
+      },
+      "improvement_vs_reference": 0.2022
+    },
+    "23": {
+      "cv": {
+        "folds": [
+          0.5977,
+          0.6206,
+          0.5857,
+          0.5706,
+          0.4251
+        ],
+        "mae_mean": 0.5599,
+        "mae_std": 0.0776
+      },
+      "test": {
+        "mae": 0.4628,
+        "rmse": 0.631
+      },
+      "fit_seconds": 1.0,
+      "n_train": 23746,
+      "n_test": 7701,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5728
+      },
+      "improvement_vs_reference": 0.192
+    },
+    "24": {
+      "cv": {
+        "folds": [
+          0.5941,
+          0.6188,
+          0.5936,
+          0.5698,
+          0.4203
+        ],
+        "mae_mean": 0.5593,
+        "mae_std": 0.0796
+      },
+      "test": {
+        "mae": 0.4605,
+        "rmse": 0.6284
+      },
+      "fit_seconds": 0.8,
+      "n_train": 23743,
+      "n_test": 7697,
+      "reference": {
+        "baseline": "naive_24h",
+        "mae": 0.5729
+      },
+      "improvement_vs_reference": 0.1962
+    }
   }
 }

@@ -1,11 +1,246 @@
 {
   "registered_model": "energy-forecaster",
-  "version": "2",
-  "alias": "champion",
-  "run_id": "64884da3c7d5408197de21d7633d2782",
-  "model": "random_forest",
-  "test_mae": 0.343,
-  "reference_baseline": "naive_1h",
-  "reference_mae": 0.4131,
-  "model_uri": "models:/energy-forecaster@champion"
+  "model_uri_template": "models:/energy-forecaster@champion-h{horizon}",
+  "horizons": {
+    "1": {
+      "version": "1",
+      "alias": "champion-h1",
+      "run_id": "c6db91856a3f47868b0ba988e24678fd",
+      "model": "random_forest",
+      "test_mae": 0.343,
+      "reference_baseline": "naive_1h",
+      "reference_mae": 0.4131,
+      "improvement_vs_reference": 0.1697
+    },
+    "2": {
+      "version": "2",
+      "alias": "champion-h2",
+      "run_id": "ff6d1f4a7cb5406b8664cb94ab9bd3b4",
+      "model": "xgboost",
+      "test_mae": 0.4332,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.573,
+      "improvement_vs_reference": 0.244
+    },
+    "3": {
+      "version": "3",
+      "alias": "champion-h3",
+      "run_id": "c8b331118c5e4c2e98df7350656f85e5",
+      "model": "xgboost",
+      "test_mae": 0.4591,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5731,
+      "improvement_vs_reference": 0.1989
+    },
+    "4": {
+      "version": "4",
+      "alias": "champion-h4",
+      "run_id": "5d89d56d9ada48b79ae2b15b528195df",
+      "model": "xgboost",
+      "test_mae": 0.4716,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.573,
+      "improvement_vs_reference": 0.177
+    },
+    "5": {
+      "version": "5",
+      "alias": "champion-h5",
+      "run_id": "a015385dd043481692ccad4dba9fb935",
+      "model": "xgboost",
+      "test_mae": 0.4685,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5729,
+      "improvement_vs_reference": 0.1822
+    },
+    "6": {
+      "version": "6",
+      "alias": "champion-h6",
+      "run_id": "f7df596e543c45fea9f3164aa9e801fd",
+      "model": "xgboost",
+      "test_mae": 0.47,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5728,
+      "improvement_vs_reference": 0.1795
+    },
+    "7": {
+      "version": "7",
+      "alias": "champion-h7",
+      "run_id": "3f35f6ee697f4db696adbeb0397e11a1",
+      "model": "xgboost",
+      "test_mae": 0.4675,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5727,
+      "improvement_vs_reference": 0.1837
+    },
+    "8": {
+      "version": "8",
+      "alias": "champion-h8",
+      "run_id": "34c81918a3664534b3c69e311297f816",
+      "model": "xgboost",
+      "test_mae": 0.4704,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5726,
+      "improvement_vs_reference": 0.1785
+    },
+    "9": {
+      "version": "9",
+      "alias": "champion-h9",
+      "run_id": "25197658852942eba3e552843cc1e820",
+      "model": "xgboost",
+      "test_mae": 0.4644,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5727,
+      "improvement_vs_reference": 0.1891
+    },
+    "10": {
+      "version": "10",
+      "alias": "champion-h10",
+      "run_id": "e6be76fab58841138fb4b4ff6d25cbe0",
+      "model": "xgboost",
+      "test_mae": 0.466,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5729,
+      "improvement_vs_reference": 0.1866
+    },
+    "11": {
+      "version": "11",
+      "alias": "champion-h11",
+      "run_id": "152d605c941347f6a4e67576ec3cc191",
+      "model": "xgboost",
+      "test_mae": 0.4656,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.573,
+      "improvement_vs_reference": 0.1874
+    },
+    "12": {
+      "version": "12",
+      "alias": "champion-h12",
+      "run_id": "12b425d3df3547928cddcd79238c32c7",
+      "model": "xgboost",
+      "test_mae": 0.4717,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5731,
+      "improvement_vs_reference": 0.1769
+    },
+    "13": {
+      "version": "13",
+      "alias": "champion-h13",
+      "run_id": "c8738762127e40f88ab4a79468668d98",
+      "model": "xgboost",
+      "test_mae": 0.4709,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.573,
+      "improvement_vs_reference": 0.1782
+    },
+    "14": {
+      "version": "14",
+      "alias": "champion-h14",
+      "run_id": "96b5a7c07e23487b9be75664f8cf4271",
+      "model": "xgboost",
+      "test_mae": 0.4716,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5731,
+      "improvement_vs_reference": 0.1771
+    },
+    "15": {
+      "version": "15",
+      "alias": "champion-h15",
+      "run_id": "23ec917ec08f432eb4e8a0c77002d4d4",
+      "model": "xgboost",
+      "test_mae": 0.4724,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5732,
+      "improvement_vs_reference": 0.1759
+    },
+    "16": {
+      "version": "16",
+      "alias": "champion-h16",
+      "run_id": "43ab84bdf7494edfbb3ba5e41b7e6f24",
+      "model": "xgboost",
+      "test_mae": 0.47,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5734,
+      "improvement_vs_reference": 0.1803
+    },
+    "17": {
+      "version": "17",
+      "alias": "champion-h17",
+      "run_id": "c1c7ee63d07840ff982c1666eff0c7dd",
+      "model": "xgboost",
+      "test_mae": 0.4705,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5733,
+      "improvement_vs_reference": 0.1793
+    },
+    "18": {
+      "version": "18",
+      "alias": "champion-h18",
+      "run_id": "1f667c2ff7d148098bbc60419a3a29d1",
+      "model": "xgboost",
+      "test_mae": 0.4697,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5732,
+      "improvement_vs_reference": 0.1806
+    },
+    "19": {
+      "version": "19",
+      "alias": "champion-h19",
+      "run_id": "dcd3bec0fd44449e9eeb7b45e196c46b",
+      "model": "xgboost",
+      "test_mae": 0.4708,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5731,
+      "improvement_vs_reference": 0.1785
+    },
+    "20": {
+      "version": "20",
+      "alias": "champion-h20",
+      "run_id": "b6f62c441bb8477a8ab3e800ca929311",
+      "model": "xgboost",
+      "test_mae": 0.4646,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5728,
+      "improvement_vs_reference": 0.1889
+    },
+    "21": {
+      "version": "21",
+      "alias": "champion-h21",
+      "run_id": "4a9fd964fceb42e9867da5d2a593fe1b",
+      "model": "xgboost",
+      "test_mae": 0.4628,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5727,
+      "improvement_vs_reference": 0.1919
+    },
+    "22": {
+      "version": "22",
+      "alias": "champion-h22",
+      "run_id": "bf0a01e2492f48e68444d7899d194907",
+      "model": "xgboost",
+      "test_mae": 0.457,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5728,
+      "improvement_vs_reference": 0.2022
+    },
+    "23": {
+      "version": "23",
+      "alias": "champion-h23",
+      "run_id": "78bb0f5efe024a9e9cc0286e9f2a732e",
+      "model": "xgboost",
+      "test_mae": 0.4628,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5728,
+      "improvement_vs_reference": 0.192
+    },
+    "24": {
+      "version": "24",
+      "alias": "champion-h24",
+      "run_id": "fbec4349ff3a4e468452e39d7c3f054b",
+      "model": "xgboost",
+      "test_mae": 0.4605,
+      "reference_baseline": "naive_24h",
+      "reference_mae": 0.5729,
+      "improvement_vs_reference": 0.1962
+    }
+  }
 }
