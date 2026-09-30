@@ -8,7 +8,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 import pytest
-from energy.evaluation import is_test, naive_forecast, split_date, reference_baseline
+from energy.evaluation import is_test, naive_forecast, split_date, reference_baseline, seasons_for_horizon
 
 def _hourly(n:int)->pd.Series:
     idx=pd.date_range("2020-01-01", periods=n, freq="h")
@@ -60,3 +60,9 @@ def test_reference_baseline_picks_the_strongest()->None:
  
     with pytest.raises(ValueError):
         reference_baseline(metrics, "naive_12h")
+
+def test_seasons_shrink_with_horizon()->None:
+    assert seasons_for_horizon(1)==(1, 24, 168)
+    assert seasons_for_horizon(6)==(24, 168)
+    assert seasons_for_horizon(24)==(24, 168)
+    assert seasons_for_horizon(48)==(168,)
