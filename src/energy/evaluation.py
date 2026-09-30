@@ -24,11 +24,21 @@ def split_date(index:pd.DatetimeIndex, test_months:int)->pd.Timestamp:
     """
     return index.max()-pd.DateOffset(months=test_months)
 
-def is_test(index:pd.DatetimeIndex, horizon:int, split:pd.Timestamp)->np.array:
+def is_test(index:pd.DatetimeIndex, horizon:int, split:pd.Timestamp)->np.ndarray:
     """
     True per righe in cui target y(t+h) cade dopo lo split.
     """
     return np.asarray(index+pd.Timedelta(hours=horizon)>split)
+
+def seasons_for_horizon(horizon: int)->tuple[int, ...]:
+    """
+    Stagionalita' utilizzabili a un dato orizzonte.
+ 
+    Una naive con season < horizon userebbe un valore non ancora osservato al
+    momento della previsione: a 24 ore la persistenza oraria non e' disponibile,
+    e il riferimento diventa la naive giornaliera.
+    """
+    return tuple(season for season in NAIVE_SEASONS if season>=horizon)
 
 def naive_forecast(y:pd.Series, season:int, horizon:int)->pd.Series:
     """
