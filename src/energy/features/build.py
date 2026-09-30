@@ -62,6 +62,21 @@ def build_features(
     out=add_rolling_features(out, target, rolling_windows)
     return out.drop(columns=[target])
 
+def supervised_for_horizon(features:pd.DataFrame, target_series:pd.Series, horizon:int)->tuple[pd.DataFrame, pd.Series]:
+    """
+    Accoppia una matrice di feature gia' costruita con il target a t + horizon.
+    Le feature non dipendono dall'orizzonte: costruirle una volta sola e
+    riusarle per tutti gli orizzonti evita di ricalcolarle 24 volte.
+    Le righe incomplete vengono scartate: warm-up iniziale, ore mancanti nel
+    dataset e ultime `horizon` righe senza target.
+    """
+    if horizon<1:
+        raise ValueError("horizon deve essere >= 1")
+ 
+    y=target_series.shift(-horizon).rename("y")
+    frame=features.join(y).dropna()
+    return frame.drop(columns=["y"]), frame["y"]
+
 def make_supervised(
         raw:pd.DataFrame,
         target:str,
@@ -71,13 +86,6 @@ def make_supervised(
 )->tuple[pd.DataFrame, pd.Series]:
     """
     Restituisce (X,y) allineati per istante di emissione t, con y=y(t+horizon).
-    Le righe incomplete vengono scartate: warm-up iniziale, ore mancanti nel dataset e ultime 
-    'horizon' righe senza target.
     """
-    if horizon<1:
-        raise ValueError("horizon deve essere >=1")
-
     features=build_features(raw, target, lags, rolling_windows)
-    y=raw[target].shift(-horizon).rename("y")
-    frame=features.join(y).dropna()
-    return frame.drop(columns=["y"]), frame["y"]
+    return supervised_for_horizon(features, raw[target], horizon)
