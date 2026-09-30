@@ -41,7 +41,7 @@ def main()->None:
     hourly.index.name="timestamp"
 
     missing=int(hourly.isna().sum())
-    print(f"Periodo: {hourly.index.min()} -> {hourly.index.max()}")
+    print(f"Periodo: {hourly.index.min()}->{hourly.index.max()}")
     print(
         f"Ore totali: {len(hourly)} | mancanti: {missing}"
         f"({missing/len(hourly):.2%})"
