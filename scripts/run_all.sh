@@ -1,5 +1,3 @@
-#scripts/run_all.sh
-
 #!/usr/bin/env bash
 # Esegue l'intera pipeline e scrive un log datato in logs/.
 #

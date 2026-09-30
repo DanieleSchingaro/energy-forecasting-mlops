@@ -1,5 +1,3 @@
-#scripts/mlflow_ui.sh
-
 #!/usr/bin/env bash
 # Avvia la UI di MLflow sullo stesso store usato dagli script (sqlite:///mlflow.db).
 # Resta in primo piano: interrompila con Ctrl+C.
