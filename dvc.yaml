@@ -76,3 +76,22 @@ stages:
     outs:
       - reports/champion.json:
           cache: false
+
+  report:
+    cmd: python -m energy.report
+    deps:
+      - src/energy/report.py
+      - src/energy/evaluation.py
+      - src/energy/config.py
+      - reports/baseline_metrics.json
+      - reports/model_metrics.json
+    params:
+      - configs/params.yaml:
+          - evaluation
+    outs:
+      - reports/summary.md:
+          cache: false
+      - reports/mae_by_horizon.csv:
+          cache: false
+      - reports/figures/mae_by_horizon.png:
+          cache: false
