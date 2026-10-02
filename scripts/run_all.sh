@@ -54,7 +54,7 @@ pipeline() {
     echo
 
     echo "--- metriche"
-    "$DVC" metrics show
+    cat reports/summary.md
     echo "=== $(date '+%F %T') pipeline completata"
 }
 
