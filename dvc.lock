@@ -222,3 +222,43 @@ stages:
       hash: md5
       md5: 850456304d5c455a08c7f0feb5bd215b
       size: 7307
+  report:
+    cmd: python -m energy.report
+    deps:
+    - path: reports/baseline_metrics.json
+      hash: md5
+      md5: 3a26cc214113bbda3ea4b40fa79e2cd0
+      size: 6903
+    - path: reports/model_metrics.json
+      hash: md5
+      md5: 0639ed15748c626cb55f403c6445052b
+      size: 13236
+    - path: src/energy/config.py
+      hash: md5
+      md5: 5c6f3d4651a1f589f5bc26b3800ec3ca
+      size: 373
+    - path: src/energy/evaluation.py
+      hash: md5
+      md5: fab83d02596fefead0a06afeaf7b77c1
+      size: 3712
+    - path: src/energy/report.py
+      hash: md5
+      md5: 1dd455f2eeb5836cc76f219626282b11
+      size: 9071
+    params:
+      configs/params.yaml:
+        evaluation:
+          reference_baseline: best
+    outs:
+    - path: reports/figures/mae_by_horizon.png
+      hash: md5
+      md5: d20bef9583b9b08a07708e97287bb4ce
+      size: 87120
+    - path: reports/mae_by_horizon.csv
+      hash: md5
+      md5: b4ad4581c1fcf0ed185ac4741e081c67
+      size: 1997
+    - path: reports/summary.md
+      hash: md5
+      md5: 398160a4daec50451c3d9356986bca58
+      size: 2057
