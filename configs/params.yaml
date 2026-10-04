@@ -41,7 +41,7 @@ evaluation:
   reference_baseline: best    # la naive piu' forte dell'orizzonte; oppure naive_24h, naive_168h
  
 mlflow:
-  tracking_uri: sqlite:///mlflow.db   # il Model Registry non funziona con il file store mlruns/
+  tracking_uri: http://localhost:5000  # server MLflow del compose; sovrascrivibile con MLFLOW_TRACKING_URI
   experiment: energy-forecasting
   registered_model: energy-forecaster
   champion_alias: champion            # l'alias effettivo e' champion-h<orizzonte>
