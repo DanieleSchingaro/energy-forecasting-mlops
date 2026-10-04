@@ -16,7 +16,7 @@
         "mae": 0.343,
         "rmse": 0.496
       },
-      "fit_seconds": 7.0,
+      "fit_seconds": 7.4,
       "n_train": 23827,
       "n_test": 7789,
       "reference": {
@@ -41,7 +41,7 @@
         "mae": 0.4611,
         "rmse": 0.6257
       },
-      "fit_seconds": 6.6,
+      "fit_seconds": 6.7,
       "n_train": 23743,
       "n_test": 7697,
       "reference": {
@@ -68,7 +68,7 @@
         "mae": 0.353,
         "rmse": 0.5022
       },
-      "fit_seconds": 0.8,
+      "fit_seconds": 0.9,
       "n_train": 23827,
       "n_test": 7789,
       "reference": {
@@ -118,7 +118,7 @@
         "mae": 0.4591,
         "rmse": 0.6245
       },
-      "fit_seconds": 0.9,
+      "fit_seconds": 0.8,
       "n_train": 23818,
       "n_test": 7781,
       "reference": {
@@ -143,7 +143,7 @@
         "mae": 0.4716,
         "rmse": 0.642
       },
-      "fit_seconds": 0.7,
+      "fit_seconds": 0.8,
       "n_train": 23814,
       "n_test": 7777,
       "reference": {
@@ -243,7 +243,7 @@
         "mae": 0.4704,
         "rmse": 0.6436
       },
-      "fit_seconds": 0.9,
+      "fit_seconds": 0.8,
       "n_train": 23798,
       "n_test": 7761,
       "reference": {
@@ -418,7 +418,7 @@
         "mae": 0.4724,
         "rmse": 0.6473
       },
-      "fit_seconds": 0.8,
+      "fit_seconds": 0.9,
       "n_train": 23770,
       "n_test": 7733,
       "reference": {
@@ -443,7 +443,7 @@
         "mae": 0.47,
         "rmse": 0.6426
       },
-      "fit_seconds": 1.0,
+      "fit_seconds": 0.9,
       "n_train": 23767,
       "n_test": 7729,
       "reference": {
@@ -468,7 +468,7 @@
         "mae": 0.4705,
         "rmse": 0.6448
       },
-      "fit_seconds": 0.8,
+      "fit_seconds": 0.9,
       "n_train": 23764,
       "n_test": 7725,
       "reference": {
@@ -518,7 +518,7 @@
         "mae": 0.4708,
         "rmse": 0.6408
       },
-      "fit_seconds": 0.7,
+      "fit_seconds": 0.9,
       "n_train": 23758,
       "n_test": 7717,
       "reference": {
@@ -618,7 +618,7 @@
         "mae": 0.4628,
         "rmse": 0.631
       },
-      "fit_seconds": 1.0,
+      "fit_seconds": 0.8,
       "n_train": 23746,
       "n_test": 7701,
       "reference": {
@@ -643,7 +643,7 @@
         "mae": 0.4605,
         "rmse": 0.6284
       },
-      "fit_seconds": 0.8,
+      "fit_seconds": 0.9,
       "n_train": 23743,
       "n_test": 7697,
       "reference": {

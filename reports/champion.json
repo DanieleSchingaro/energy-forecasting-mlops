@@ -5,7 +5,7 @@
     "1": {
       "version": "1",
       "alias": "champion-h1",
-      "run_id": "c6db91856a3f47868b0ba988e24678fd",
+      "run_id": "763b17b3e1964aae9b9efc58681c4151",
       "model": "random_forest",
       "test_mae": 0.343,
       "reference_baseline": "naive_1h",
@@ -15,7 +15,7 @@
     "2": {
       "version": "2",
       "alias": "champion-h2",
-      "run_id": "ff6d1f4a7cb5406b8664cb94ab9bd3b4",
+      "run_id": "986abbbe8bf541d59aabec0739b2ac4f",
       "model": "xgboost",
       "test_mae": 0.4332,
       "reference_baseline": "naive_24h",
@@ -25,7 +25,7 @@
     "3": {
       "version": "3",
       "alias": "champion-h3",
-      "run_id": "c8b331118c5e4c2e98df7350656f85e5",
+      "run_id": "6daeccc0fc2b4e12a1d8f0d8cab2ffad",
       "model": "xgboost",
       "test_mae": 0.4591,
       "reference_baseline": "naive_24h",
@@ -35,7 +35,7 @@
     "4": {
       "version": "4",
       "alias": "champion-h4",
-      "run_id": "5d89d56d9ada48b79ae2b15b528195df",
+      "run_id": "c4dbf6d92abf41e79b29bf1d909c176b",
       "model": "xgboost",
       "test_mae": 0.4716,
       "reference_baseline": "naive_24h",
@@ -45,7 +45,7 @@
     "5": {
       "version": "5",
       "alias": "champion-h5",
-      "run_id": "a015385dd043481692ccad4dba9fb935",
+      "run_id": "a7a0de1c34e343a6a1beb21e0f736878",
       "model": "xgboost",
       "test_mae": 0.4685,
       "reference_baseline": "naive_24h",
@@ -55,7 +55,7 @@
     "6": {
       "version": "6",
       "alias": "champion-h6",
-      "run_id": "f7df596e543c45fea9f3164aa9e801fd",
+      "run_id": "26b534baa332415e8fcbda11c1b1031d",
       "model": "xgboost",
       "test_mae": 0.47,
       "reference_baseline": "naive_24h",
@@ -65,7 +65,7 @@
     "7": {
       "version": "7",
       "alias": "champion-h7",
-      "run_id": "3f35f6ee697f4db696adbeb0397e11a1",
+      "run_id": "17ce0c67cef9495d8fd3dbd6441f4abf",
       "model": "xgboost",
       "test_mae": 0.4675,
       "reference_baseline": "naive_24h",
@@ -75,7 +75,7 @@
     "8": {
       "version": "8",
       "alias": "champion-h8",
-      "run_id": "34c81918a3664534b3c69e311297f816",
+      "run_id": "e75baa47126a4f1292e7cebf448389a7",
       "model": "xgboost",
       "test_mae": 0.4704,
       "reference_baseline": "naive_24h",
@@ -85,7 +85,7 @@
     "9": {
       "version": "9",
       "alias": "champion-h9",
-      "run_id": "25197658852942eba3e552843cc1e820",
+      "run_id": "37658caacb5a401b92c5829aed44c6f2",
       "model": "xgboost",
       "test_mae": 0.4644,
       "reference_baseline": "naive_24h",
@@ -95,7 +95,7 @@
     "10": {
       "version": "10",
       "alias": "champion-h10",
-      "run_id": "e6be76fab58841138fb4b4ff6d25cbe0",
+      "run_id": "4ddfbea9cec44ff6bc1da6b845f93498",
       "model": "xgboost",
       "test_mae": 0.466,
       "reference_baseline": "naive_24h",
@@ -105,7 +105,7 @@
     "11": {
       "version": "11",
       "alias": "champion-h11",
-      "run_id": "152d605c941347f6a4e67576ec3cc191",
+      "run_id": "727ca79d41884fb9a156fa8d90358e7c",
       "model": "xgboost",
       "test_mae": 0.4656,
       "reference_baseline": "naive_24h",
@@ -115,7 +115,7 @@
     "12": {
       "version": "12",
       "alias": "champion-h12",
-      "run_id": "12b425d3df3547928cddcd79238c32c7",
+      "run_id": "ad62fe9bc7b341aab2f944407ef10c34",
       "model": "xgboost",
       "test_mae": 0.4717,
       "reference_baseline": "naive_24h",
@@ -125,7 +125,7 @@
     "13": {
       "version": "13",
       "alias": "champion-h13",
-      "run_id": "c8738762127e40f88ab4a79468668d98",
+      "run_id": "01d5935add164155a254fa7c9fae7f8a",
       "model": "xgboost",
       "test_mae": 0.4709,
       "reference_baseline": "naive_24h",
@@ -135,7 +135,7 @@
     "14": {
       "version": "14",
       "alias": "champion-h14",
-      "run_id": "96b5a7c07e23487b9be75664f8cf4271",
+      "run_id": "71c44dcafa4e4df18728391082ef9ff9",
       "model": "xgboost",
       "test_mae": 0.4716,
       "reference_baseline": "naive_24h",
@@ -145,7 +145,7 @@
     "15": {
       "version": "15",
       "alias": "champion-h15",
-      "run_id": "23ec917ec08f432eb4e8a0c77002d4d4",
+      "run_id": "a6a51279cd1343759b928a2d7c285092",
       "model": "xgboost",
       "test_mae": 0.4724,
       "reference_baseline": "naive_24h",
@@ -155,7 +155,7 @@
     "16": {
       "version": "16",
       "alias": "champion-h16",
-      "run_id": "43ab84bdf7494edfbb3ba5e41b7e6f24",
+      "run_id": "eff99e1153a74409ae6395acd5d93c73",
       "model": "xgboost",
       "test_mae": 0.47,
       "reference_baseline": "naive_24h",
@@ -165,7 +165,7 @@
     "17": {
       "version": "17",
       "alias": "champion-h17",
-      "run_id": "c1c7ee63d07840ff982c1666eff0c7dd",
+      "run_id": "994288730e274bff8f5d2e771d1753af",
       "model": "xgboost",
       "test_mae": 0.4705,
       "reference_baseline": "naive_24h",
@@ -175,7 +175,7 @@
     "18": {
       "version": "18",
       "alias": "champion-h18",
-      "run_id": "1f667c2ff7d148098bbc60419a3a29d1",
+      "run_id": "c76685855a7548e3a624410760bd8593",
       "model": "xgboost",
       "test_mae": 0.4697,
       "reference_baseline": "naive_24h",
@@ -185,7 +185,7 @@
     "19": {
       "version": "19",
       "alias": "champion-h19",
-      "run_id": "dcd3bec0fd44449e9eeb7b45e196c46b",
+      "run_id": "fce257b3fbdc48368b4393c235af2f8d",
       "model": "xgboost",
       "test_mae": 0.4708,
       "reference_baseline": "naive_24h",
@@ -195,7 +195,7 @@
     "20": {
       "version": "20",
       "alias": "champion-h20",
-      "run_id": "b6f62c441bb8477a8ab3e800ca929311",
+      "run_id": "ac9e34086ad54a8c8df7dc5b68f41e9f",
       "model": "xgboost",
       "test_mae": 0.4646,
       "reference_baseline": "naive_24h",
@@ -205,7 +205,7 @@
     "21": {
       "version": "21",
       "alias": "champion-h21",
-      "run_id": "4a9fd964fceb42e9867da5d2a593fe1b",
+      "run_id": "eda8616d928044fda1579590cff0be29",
       "model": "xgboost",
       "test_mae": 0.4628,
       "reference_baseline": "naive_24h",
@@ -215,7 +215,7 @@
     "22": {
       "version": "22",
       "alias": "champion-h22",
-      "run_id": "bf0a01e2492f48e68444d7899d194907",
+      "run_id": "0d22e7bd2a4f46e39d8802efb2d7e4cc",
       "model": "xgboost",
       "test_mae": 0.457,
       "reference_baseline": "naive_24h",
@@ -225,7 +225,7 @@
     "23": {
       "version": "23",
       "alias": "champion-h23",
-      "run_id": "78bb0f5efe024a9e9cc0286e9f2a732e",
+      "run_id": "bd2720c83b6d48ac8cf79579dad94f81",
       "model": "xgboost",
       "test_mae": 0.4628,
       "reference_baseline": "naive_24h",
@@ -235,7 +235,7 @@
     "24": {
       "version": "24",
       "alias": "champion-h24",
-      "run_id": "fbec4349ff3a4e468452e39d7c3f054b",
+      "run_id": "518db442420242cfb8b41c1406bf424d",
       "model": "xgboost",
       "test_mae": 0.4605,
       "reference_baseline": "naive_24h",

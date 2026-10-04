@@ -53,8 +53,8 @@ stages:
       size: 2929
     - path: src/energy/tracking.py
       hash: md5
-      md5: 9df236077f06ea01e7570737b99d57b4
-      size: 942
+      md5: a70a914487fe01e41bc8aef470ca8dcd
+      size: 1480
     params:
       configs/params.yaml:
         data:
@@ -75,7 +75,7 @@ stages:
           - 24
           - 168
         mlflow:
-          tracking_uri: sqlite:///mlflow.db
+          tracking_uri: http://localhost:5000
           experiment: energy-forecasting
           registered_model: energy-forecaster
           champion_alias: champion
@@ -117,8 +117,8 @@ stages:
       size: 9349
     - path: src/energy/tracking.py
       hash: md5
-      md5: 9df236077f06ea01e7570737b99d57b4
-      size: 942
+      md5: a70a914487fe01e41bc8aef470ca8dcd
+      size: 1480
     params:
       configs/params.yaml:
         data:
@@ -141,7 +141,7 @@ stages:
           - 24
           - 168
         mlflow:
-          tracking_uri: sqlite:///mlflow.db
+          tracking_uri: http://localhost:5000
           experiment: energy-forecasting
           registered_model: energy-forecaster
           champion_alias: champion
@@ -183,7 +183,7 @@ stages:
       nfiles: 26
     - path: reports/model_metrics.json
       hash: md5
-      md5: 0639ed15748c626cb55f403c6445052b
+      md5: 71030d8c5ba4efae032b70283472d402
       size: 13236
   promote:
     cmd: python -m energy.models.promote
@@ -194,7 +194,7 @@ stages:
       size: 6903
     - path: reports/model_metrics.json
       hash: md5
-      md5: 0639ed15748c626cb55f403c6445052b
+      md5: 71030d8c5ba4efae032b70283472d402
       size: 13236
     - path: src/energy/evaluation.py
       hash: md5
@@ -206,21 +206,21 @@ stages:
       size: 4088
     - path: src/energy/tracking.py
       hash: md5
-      md5: 9df236077f06ea01e7570737b99d57b4
-      size: 942
+      md5: a70a914487fe01e41bc8aef470ca8dcd
+      size: 1480
     params:
       configs/params.yaml:
         evaluation:
           reference_baseline: best
         mlflow:
-          tracking_uri: sqlite:///mlflow.db
+          tracking_uri: http://localhost:5000
           experiment: energy-forecasting
           registered_model: energy-forecaster
           champion_alias: champion
     outs:
     - path: reports/champion.json
       hash: md5
-      md5: 850456304d5c455a08c7f0feb5bd215b
+      md5: 2aed3efb1a81f284d0a730af5c504eef
       size: 7307
   report:
     cmd: python -m energy.report
@@ -231,7 +231,7 @@ stages:
       size: 6903
     - path: reports/model_metrics.json
       hash: md5
-      md5: 0639ed15748c626cb55f403c6445052b
+      md5: 71030d8c5ba4efae032b70283472d402
       size: 13236
     - path: src/energy/config.py
       hash: md5
