@@ -37,6 +37,9 @@ for tool in "$PY" "$DVC"; do
     fi
 done
 
+#la console Windows usa cp1252 e MLflow stampa caratteri Unicode a fine run
+export PYTHONUTF8=1
+
 # credenziali e indirizzi dei servizi, se il file esiste
 if [ -f .env ]; then
     set -a
