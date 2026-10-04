@@ -37,6 +37,13 @@ for tool in "$PY" "$DVC"; do
     fi
 done
 
+# credenziali e indirizzi dei servizi, se il file esiste
+if [ -f .env ]; then
+    set -a
+    . ./.env
+    set +a
+fi
+
 mkdir -p logs
 LOG="logs/run_$(date +%Y%m%d_%H%M%S).log"
 
