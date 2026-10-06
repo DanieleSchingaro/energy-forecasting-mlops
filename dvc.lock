@@ -262,3 +262,32 @@ stages:
       hash: md5
       md5: 398160a4daec50451c3d9356986bca58
       size: 2057
+  ingest:
+    cmd: python -m energy.data.ingest
+    deps:
+    - path: data/processed/hourly.parquet
+      hash: md5
+      md5: b2bdbbef1d0ecc52945b70b31daf38fe
+      size: 530239
+    - path: src/energy/config.py
+      hash: md5
+      md5: 5c6f3d4651a1f589f5bc26b3800ec3ca
+      size: 373
+    - path: src/energy/data/ingest.py
+      hash: md5
+      md5: e52201f29bb926787b4a6f0028afd1dc
+      size: 1219
+    - path: src/energy/db.py
+      hash: md5
+      md5: cdd8904a146bdb77390d17ce377ddc1c
+      size: 4781
+    params:
+      configs/params.yaml:
+        data:
+          processed_path: data/processed/hourly.parquet
+          target: global_active_power
+    outs:
+    - path: reports/ingest.json
+      hash: md5
+      md5: 2f957cf8be8a11c650a3750aacff12c8
+      size: 116
