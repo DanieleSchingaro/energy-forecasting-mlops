@@ -16,6 +16,20 @@ stages:
     outs:
       - data/processed/hourly.parquet
 
+  ingest:
+    cmd: python -m energy.data.ingest
+    deps:
+      - src/energy/data/ingest.py
+      - src/energy/db.py
+      - src/energy/config.py
+      - data/processed/hourly.parquet
+    params:
+      - configs/params.yaml:
+          - data
+    outs:
+      - reports/ingest.json:
+          cache: false
+
   baseline:
     cmd: python -m energy.models.baseline
     deps:
