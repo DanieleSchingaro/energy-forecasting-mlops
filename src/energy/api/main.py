@@ -12,7 +12,10 @@ dall'ambiente, perche' cambiano fra host e container.
 """
 
 from __future__ import annotations
+import logging
 import os
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from datetime import datetime
 from functools import lru_cache
 import pandas as pd
@@ -24,10 +27,33 @@ from energy.config import load_params
 from energy.db import coverage, create_schema, get_engine, upsert_measurements
 from energy.tracking import setup_mlflow
 
+logger=logging.getLogger(__name__)
+
+
+def _preload_requested()->bool:
+    return os.environ.get("API_PRELOAD_MODELS", "").lower() in {"1", "true", "yes"}
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """
+    Nel container i modelli si caricano all'avvio, non alla prima richiesta.
+    Se il registry non risponde il servizio parte lo stesso: i modelli verranno
+    caricati piu' tardi, e /health dichiara quanti ne risultano pronti.
+    """
+    if _preload_requested():
+        try:
+            get_service().registry.preload()
+        except Exception as error:  # noqa: BLE001 - l'avvio non deve dipenderne
+            logger.warning("precaricamento dei modelli non riuscito: %s", error)
+    yield
+
+
 app=FastAPI(
     title="Energy forecasting API",
     description="Previsione oraria del consumo elettrico fino a 24 ore di anticipo.",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 
@@ -43,9 +69,6 @@ def get_service()->ForecastService:
     create_schema(engine)
 
     registry=ModelRegistry(params["mlflow"], params["features"]["max_horizon"])
-    if os.environ.get("API_PRELOAD_MODELS", "").lower() in {"1", "true", "yes"}:
-        registry.preload()
-
     return ForecastService(engine, registry, params)
 
 
@@ -56,7 +79,7 @@ def health(service:ForecastService=Depends(get_service))->Health:
         reachable=True
     except Exception:  # il servizio resta interrogabile anche a database spento
         stats={"rows":0, "last":None}
-        reachable=False
+        reachable = False
 
     return Health(
         status="ok" if reachable else "degraded",
@@ -81,11 +104,11 @@ def models(service:ForecastService=Depends(get_service))->dict:
 
 @app.get("/forecast", response_model=ForecastResponse)
 def forecast(
-    issued_at:datetime|None=Query(
+    issued_at: datetime|None=Query(
         default=None,
         description="ultima ora osservata; se omessa, la piu' recente nel database",
     ),
-    service: ForecastService=Depends(get_service),
+    service:ForecastService=Depends(get_service),
 )->dict:
     moment=pd.Timestamp(issued_at) if issued_at else service.latest_timestamp()
     if moment is None:
