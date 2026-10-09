@@ -88,6 +88,18 @@ services:
       retries: 10
       start_period: 60s
 
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/dashboard/Dockerfile
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      API_URL: http://api:8000
+    ports:
+      - "${DASHBOARD_PORT:-8501}:8501"
+
 volumes:
   pgdata:
   mlartifacts:
