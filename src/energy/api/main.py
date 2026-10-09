@@ -18,6 +18,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import datetime
 from functools import lru_cache
+import mlflow
 import pandas as pd
 from fastapi import Depends, FastAPI, HTTPException, Query
 from energy.api.registry import ModelRegistry
@@ -25,7 +26,7 @@ from energy.api.schemas import ForecastResponse, Health, IngestResponse, Measure
 from energy.api.service import ForecastService, WindowUnavailable
 from energy.config import load_params
 from energy.db import coverage, create_schema, get_engine, upsert_measurements
-from energy.tracking import setup_mlflow
+from energy.tracking import tracking_uri
 
 logger=logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ def _preload_requested()->bool:
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+async def lifespan(app: FastAPI)->AsyncIterator[None]:
     """
     Nel container i modelli si caricano all'avvio, non alla prima richiesta.
     Se il registry non risponde il servizio parte lo stesso: i modelli verranno
@@ -63,7 +64,9 @@ def get_service()->ForecastService:
     Costruita una volta sola: l'engine ha un pool e i modelli restano in memoria.
     """
     params=load_params()
-    setup_mlflow(params)
+    # qui serve solo leggere dal registry: impostare l'esperimento comporterebbe
+    # una chiamata di rete all'avvio, e un servizio che muore se MLflow tarda
+    mlflow.set_tracking_uri(tracking_uri(params["mlflow"]))
 
     engine=get_engine()
     create_schema(engine)
@@ -73,13 +76,13 @@ def get_service()->ForecastService:
 
 
 @app.get("/health", response_model=Health)
-def health(service:ForecastService=Depends(get_service))->Health:
+def health(service: ForecastService=Depends(get_service))->Health:
     try:
         stats=coverage(service.engine)
         reachable=True
     except Exception:  # il servizio resta interrogabile anche a database spento
         stats={"rows":0, "last":None}
-        reachable = False
+        reachable=False
 
     return Health(
         status="ok" if reachable else "degraded",
@@ -104,11 +107,11 @@ def models(service:ForecastService=Depends(get_service))->dict:
 
 @app.get("/forecast", response_model=ForecastResponse)
 def forecast(
-    issued_at: datetime|None=Query(
+    issued_at:datetime|None=Query(
         default=None,
         description="ultima ora osservata; se omessa, la piu' recente nel database",
     ),
-    service:ForecastService=Depends(get_service),
+    service: ForecastService=Depends(get_service),
 )->dict:
     moment=pd.Timestamp(issued_at) if issued_at else service.latest_timestamp()
     if moment is None:
