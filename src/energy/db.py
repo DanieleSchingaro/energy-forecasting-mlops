@@ -42,7 +42,7 @@ class DatabaseSettings(BaseSettings):
 
     database_url:str=""
     postgres_user:str="energy"
-    postgres_password:str ="energy"
+    postgres_password:str="energy"
     postgres_db:str="energy"
     postgres_host:str="localhost"
     postgres_port:int=5432
@@ -87,14 +87,14 @@ def upsert_measurements(engine:Engine, frame:pd.DataFrame, chunk_size:int=5000)-
             statement=insert(MEASUREMENTS).values(chunk)
             statement=statement.on_conflict_do_update(
                 index_elements=["timestamp"],
-                set_={"kw": statement.excluded.kw},
+                set_={"kw":statement.excluded.kw},
             )
             connection.execute(statement)
             written+=len(chunk)
     return written
 
 
-def read_window(engine: Engine, end, hours: int) -> pd.DataFrame:
+def read_window(engine:Engine, end, hours:int)->pd.DataFrame:
     """
     Le `hours` ore che terminano a `end` incluso, ordinate nel tempo.
     E' la finestra che serve all'API per costruire le feature.
@@ -141,5 +141,22 @@ def _insert_for(engine:Engine):
     elif engine.dialect.name=="sqlite":
         from sqlalchemy.dialects.sqlite import insert
     else:
-        raise NotImplementedError(f"dialetto non supportato:{engine.dialect.name}")
+        raise NotImplementedError(f"dialetto non supportato: {engine.dialect.name}")
     return insert
+
+
+def read_range(engine:Engine, start, end, limit:int=5000)->pd.DataFrame:
+    """
+    Misurazioni fra due istanti inclusi, in ordine di tempo.
+    """
+    query=(
+        select(MEASUREMENTS.c.timestamp, MEASUREMENTS.c.kw)
+        .where(MEASUREMENTS.c.timestamp>=pd.Timestamp(start).to_pydatetime())
+        .where(MEASUREMENTS.c.timestamp<=pd.Timestamp(end).to_pydatetime())
+        .order_by(MEASUREMENTS.c.timestamp)
+        .limit(limit)
+    )
+    with engine.connect() as connection:
+        frame=pd.DataFrame(connection.execute(query).fetchall(), columns=["timestamp", "kw"])
+    frame["timestamp"]=pd.to_datetime(frame["timestamp"])
+    return frame
