@@ -25,7 +25,7 @@ from energy.api.registry import ModelRegistry
 from energy.api.schemas import ForecastResponse, Health, IngestResponse, Measurement
 from energy.api.service import ForecastService, WindowUnavailable
 from energy.config import load_params
-from energy.db import coverage, create_schema, get_engine, upsert_measurements
+from energy.db import coverage, create_schema, get_engine, read_range, upsert_measurements
 from energy.tracking import tracking_uri
 
 logger=logging.getLogger(__name__)
@@ -76,7 +76,7 @@ def get_service()->ForecastService:
 
 
 @app.get("/health", response_model=Health)
-def health(service: ForecastService=Depends(get_service))->Health:
+def health(service:ForecastService=Depends(get_service))->Health:
     try:
         stats=coverage(service.engine)
         reachable=True
@@ -111,7 +111,7 @@ def forecast(
         default=None,
         description="ultima ora osservata; se omessa, la piu' recente nel database",
     ),
-    service: ForecastService=Depends(get_service),
+    service:ForecastService=Depends(get_service),
 )->dict:
     moment=pd.Timestamp(issued_at) if issued_at else service.latest_timestamp()
     if moment is None:
@@ -131,6 +131,22 @@ def forecast(
         ) from problem
 
 
+@app.get("/measurements", response_model=list[Measurement])
+def read_measurements(
+    start:datetime=Query(description="prima ora inclusa"),
+    end:datetime=Query(description="ultima ora inclusa"),
+    service:ForecastService=Depends(get_service),
+)->list[dict]:
+    """
+    Storico osservato: serve alla dashboard per affiancarlo alla previsione.
+    """
+    if end<start:
+        raise HTTPException(status_code=400, detail="end precede start")
+
+    frame=read_range(service.engine, start, end)
+    return frame.to_dict("records")
+
+
 @app.post("/measurements", response_model=IngestResponse, status_code=201)
 def add_measurements(
     measurements:list[Measurement],
@@ -144,4 +160,4 @@ def add_measurements(
 
     frame=pd.DataFrame([item.model_dump() for item in measurements])
     written=upsert_measurements(service.engine, frame)
-    return {"written":written, **coverage(service.engine)}
+    return {"written": written, **coverage(service.engine)}
