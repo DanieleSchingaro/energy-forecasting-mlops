@@ -2,7 +2,6 @@
 
 """
 Verifica dell'API con database in memoria e modelli finti.
-
 I modelli veri vivono nel registry di MLflow: qui interessa il comportamento
 del servizio, cioe' che la finestra venga validata, che le feature arrivino ai
 modelli e che la risposta dichiari quale versione ha prodotto ogni valore.
@@ -22,8 +21,8 @@ from energy.api.service import ForecastService, WindowUnavailable
 from energy.db import create_schema, upsert_measurements
 
 PARAMS={
-    "data":{"target":"global_active_power"},
-    "features":{"max_horizon":3, "lags":[0, 1, 24], "rolling_windows":[24]},
+    "data":{"target": "global_active_power"},
+    "features":{"max_horizon": 3, "lags": [0, 1, 24], "rolling_windows": [24]},
 }
 LAST=pd.Timestamp("2010-01-10 00:00")
 
@@ -50,20 +49,20 @@ class FakeRegistry:
         )
 
     def describe(self)->list[dict]:
-        return [{"horizon":h} for h in sorted(set(self.requested))]
+        return [{"horizon": h} for h in sorted(set(self.requested))]
 
 
 class _Predictor:
     def __init__(self, horizon:int)->None:
         self.horizon=horizon
 
-    def predict(self, features:pd.DataFrame)->np.ndarray:
-        return np.array([features["lag_0h"].iloc[0]+self.horizon])
+    def predict(self, features: pd.DataFrame)->np.ndarray:
+        return np.array([features["lag_0h"].iloc[0] + self.horizon])
 
 
 def _measurements(hours:int, end:pd.Timestamp=LAST)->pd.DataFrame:
-    index = pd.date_range(end-pd.Timedelta(hours=hours-1), end, freq="h")
-    return pd.DataFrame({"timestamp":index, "kw":np.arange(float(hours))})
+    index=pd.date_range(end-pd.Timedelta(hours=hours-1), end, freq="h")
+    return pd.DataFrame({"timestamp": index, "kw": np.arange(float(hours))})
 
 
 @pytest.fixture
@@ -102,8 +101,8 @@ def test_forecast_returns_one_point_per_horizon(client:TestClient)->None:
     assert body["points"][0]["model_version"]=="1"
 
 
-def test_forecast_uses_the_requested_moment(client:TestClient)->None:
-    response=client.get("/forecast", params={"issued_at":"2010-01-09T00:00:00"})
+def test_forecast_uses_the_requested_moment(client: TestClient)->None:
+    response=client.get("/forecast", params={"issued_at": "2010-01-09T00:00:00"})
 
     assert response.status_code==200
     assert response.json()["issued_at"].startswith("2010-01-09T00:00")
@@ -124,7 +123,7 @@ def test_incomplete_window_is_refused(client:TestClient, service:ForecastService
     assert detail["found_hours"]==24
 
 
-def test_window_before_the_data_is_refused(service: ForecastService)->None:
+def test_window_before_the_data_is_refused(service:ForecastService)->None:
     with pytest.raises(WindowUnavailable):
         service.features_at(pd.Timestamp("2009-12-25 00:00"))
 
@@ -145,3 +144,24 @@ def test_health_reports_the_series(client:TestClient)->None:
     assert body["status"]=="ok"
     assert body["database"] is True
     assert body["measurements"]==400
+
+
+def test_measurements_range_is_inclusive(client:TestClient)->None:
+    response=client.get(
+        "/measurements",
+        params={"start": "2010-01-09T22:00:00", "end": "2010-01-10T00:00:00"},
+    )
+
+    assert response.status_code==200
+    body=response.json()
+    assert len(body)==3
+    assert body[0]["timestamp"].startswith("2010-01-09T22:00")
+
+
+def test_measurements_range_rejects_inverted_bounds(client:TestClient)->None:
+    response=client.get(
+        "/measurements",
+        params={"start": "2010-01-10T00:00:00", "end": "2010-01-09T00:00:00"},
+    )
+
+    assert response.status_code==400
