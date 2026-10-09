@@ -16,6 +16,13 @@ import mlflow
 SERIALIZATION_FORMAT="cloudpickle"
 
 
+def tracking_uri(config:dict[str, Any])->str:
+    """
+    Indirizzo del server: l'ambiente ha la precedenza sul file.
+    """
+    return os.environ.get("MLFLOW_TRACKING_URI", config["tracking_uri"])
+
+
 def setup_mlflow(params:dict[str, Any])->dict[str, Any]:
     """
     Imposta tracking URI ed esperimento, e restituisce la sezione mlflow.
@@ -24,7 +31,7 @@ def setup_mlflow(params:dict[str, Any])->dict[str, Any]:
     quello visto dall'host, e deve poter cambiare senza toccare params.yaml.
     """
     config=params["mlflow"]
-    mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", config["tracking_uri"]))
+    mlflow.set_tracking_uri(tracking_uri(config))
     mlflow.set_experiment(config["experiment"])
     return config
 
