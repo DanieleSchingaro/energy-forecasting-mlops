@@ -1,0 +1,6 @@
+# La dashboard parla con l'API via HTTP: non le servono modelli, database
+# o il pacchetto energy. Allinea le versioni dopo il primo pip install.
+streamlit==1.65.0
+altair==6.3.0
+pandas==3.0.6
+requests==2.34.2
