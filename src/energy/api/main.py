@@ -1,4 +1,4 @@
-#src/energy/api/main.py
+# src/energy/api/main.py
 
 """
 API di previsione.
@@ -12,15 +12,18 @@ dall'ambiente, perche' cambiano fra host e container.
 """
 
 from __future__ import annotations
+
 import logging
 import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import datetime
 from functools import lru_cache
+
 import mlflow
 import pandas as pd
 from fastapi import Depends, FastAPI, HTTPException, Query
+
 from energy.api.registry import ModelRegistry
 from energy.api.schemas import ForecastResponse, Health, IngestResponse, Measurement
 from energy.api.service import ForecastService, WindowUnavailable
@@ -28,15 +31,15 @@ from energy.config import load_params
 from energy.db import coverage, create_schema, get_engine, read_range, upsert_measurements
 from energy.tracking import tracking_uri
 
-logger=logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
-def _preload_requested()->bool:
+def _preload_requested() -> bool:
     return os.environ.get("API_PRELOAD_MODELS", "").lower() in {"1", "true", "yes"}
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI)->AsyncIterator[None]:
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """
     Nel container i modelli si caricano all'avvio, non alla prima richiesta.
     Se il registry non risponde il servizio parte lo stesso: i modelli verranno
@@ -50,7 +53,7 @@ async def lifespan(app: FastAPI)->AsyncIterator[None]:
     yield
 
 
-app=FastAPI(
+app = FastAPI(
     title="Energy forecasting API",
     description="Previsione oraria del consumo elettrico fino a 24 ore di anticipo.",
     version="0.1.0",
@@ -59,30 +62,31 @@ app=FastAPI(
 
 
 @lru_cache
-def get_service()->ForecastService:
+def get_service() -> ForecastService:
     """
     Costruita una volta sola: l'engine ha un pool e i modelli restano in memoria.
     """
-    params=load_params()
+    params = load_params()
     # qui serve solo leggere dal registry: impostare l'esperimento comporterebbe
     # una chiamata di rete all'avvio, e un servizio che muore se MLflow tarda
     mlflow.set_tracking_uri(tracking_uri(params["mlflow"]))
 
-    engine=get_engine()
+    engine = get_engine()
     create_schema(engine)
 
-    registry=ModelRegistry(params["mlflow"], params["features"]["max_horizon"])
+    registry = ModelRegistry(params["mlflow"], params["features"]["max_horizon"])
     return ForecastService(engine, registry, params)
 
 
 @app.get("/health", response_model=Health)
-def health(service:ForecastService=Depends(get_service))->Health:
+def health(service: ForecastService = Depends(get_service)) -> Health:
     try:
-        stats=coverage(service.engine)
-        reachable=True
-    except Exception:  # il servizio resta interrogabile anche a database spento
-        stats={"rows":0, "last":None}
-        reachable=False
+        stats = coverage(service.engine)
+        reachable = True
+    # il servizio resta interrogabile anche a database spento
+    except Exception:  # noqa: BLE001
+        stats = {"rows": 0, "last": None}
+        reachable = False
 
     return Health(
         status="ok" if reachable else "degraded",
@@ -94,26 +98,26 @@ def health(service:ForecastService=Depends(get_service))->Health:
 
 
 @app.get("/models")
-def models(service:ForecastService=Depends(get_service))->dict:
+def models(service: ForecastService = Depends(get_service)) -> dict:
     """
     Modelli caricati finora, con alias e versione che li identificano.
     """
     return {
-        "registered_model":service.registry.name,
-        "max_horizon":service.max_horizon,
-        "loaded":service.registry.describe(),
+        "registered_model": service.registry.name,
+        "max_horizon": service.max_horizon,
+        "loaded": service.registry.describe(),
     }
 
 
 @app.get("/forecast", response_model=ForecastResponse)
 def forecast(
-    issued_at:datetime|None=Query(
+    issued_at: datetime | None = Query(
         default=None,
         description="ultima ora osservata; se omessa, la piu' recente nel database",
     ),
-    service:ForecastService=Depends(get_service),
-)->dict:
-    moment=pd.Timestamp(issued_at) if issued_at else service.latest_timestamp()
+    service: ForecastService = Depends(get_service),
+) -> dict:
+    moment = pd.Timestamp(issued_at) if issued_at else service.latest_timestamp()
     if moment is None:
         raise HTTPException(status_code=409, detail="nessuna misurazione disponibile")
 
@@ -123,41 +127,41 @@ def forecast(
         raise HTTPException(
             status_code=422,
             detail={
-                "detail":str(problem),
-                "expected_hours":problem.expected,
-                "found_hours":problem.found,
-                "missing":[str(stamp) for stamp in problem.missing],
+                "detail": str(problem),
+                "expected_hours": problem.expected,
+                "found_hours": problem.found,
+                "missing": [str(stamp) for stamp in problem.missing],
             },
         ) from problem
 
 
 @app.get("/measurements", response_model=list[Measurement])
 def read_measurements(
-    start:datetime=Query(description="prima ora inclusa"),
-    end:datetime=Query(description="ultima ora inclusa"),
-    service:ForecastService=Depends(get_service),
-)->list[dict]:
+    start: datetime = Query(description="prima ora inclusa"),
+    end: datetime = Query(description="ultima ora inclusa"),
+    service: ForecastService = Depends(get_service),
+) -> list[dict]:
     """
     Storico osservato: serve alla dashboard per affiancarlo alla previsione.
     """
-    if end<start:
+    if end < start:
         raise HTTPException(status_code=400, detail="end precede start")
 
-    frame=read_range(service.engine, start, end)
+    frame = read_range(service.engine, start, end)
     return frame.to_dict("records")
 
 
 @app.post("/measurements", response_model=IngestResponse, status_code=201)
 def add_measurements(
-    measurements:list[Measurement],
-    service:ForecastService=Depends(get_service),
-)->dict:
+    measurements: list[Measurement],
+    service: ForecastService = Depends(get_service),
+) -> dict:
     """
     Inserisce o aggiorna misurazioni: e' cio' che tiene viva la finestra.
     """
     if not measurements:
         raise HTTPException(status_code=400, detail="nessuna misurazione nel corpo della richiesta")
 
-    frame=pd.DataFrame([item.model_dump() for item in measurements])
-    written=upsert_measurements(service.engine, frame)
+    frame = pd.DataFrame([item.model_dump() for item in measurements])
+    written = upsert_measurements(service.engine, frame)
     return {"written": written, **coverage(service.engine)}

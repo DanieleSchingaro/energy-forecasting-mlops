@@ -19,3 +19,16 @@ packages = [
 
 [tool.ruff]
 line-length = 100
+
+[tool.ruff.lint.flake8-bugbear]
+# Depends/Query/Body sono l'idioma documentato di FastAPI: la chiamata nel
+# valore di default e' intenzionale, non una svista.
+extend-immutable-calls = [
+    "fastapi.Body",
+    "fastapi.Depends",
+    "fastapi.File",
+    "fastapi.Form",
+    "fastapi.Header",
+    "fastapi.Path",
+    "fastapi.Query",
+]
