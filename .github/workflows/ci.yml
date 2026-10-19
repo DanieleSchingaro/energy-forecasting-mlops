@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: lint e test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Installa le dipendenze
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+          pip install -e .
+
+      - name: Lint
+        run: |
+          ruff check .
+          ruff format --check .
+
+      # I test non richiedono Postgres ne' MLflow: il database e' SQLite in
+      # memoria e i modelli sono finti. Per questo la CI non ha servizi.
+      - name: Test
+        run: pytest -q
+
+  images:
+    name: build delle immagini
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Immagine dell'API
+        run: docker build -f docker/api/Dockerfile .
+
+      - name: Immagine della dashboard
+        run: docker build -f docker/dashboard/Dockerfile .
